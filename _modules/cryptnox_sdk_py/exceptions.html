@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cryptnox_sdk_py.exceptions &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cryptnox_sdk_py
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cryptnox_sdk_py.exceptions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cryptnox_sdk_py.exceptions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module containing all exceptions that Cryptnox SDK Python module can raise.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="CryptnoxException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CryptnoxException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CryptnoxException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base exception for the class exceptions.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CardClosedException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CardClosedException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CardClosedException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The card wasn&#39;t opened with PIN code or challenge-response&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CardException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CardException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CardException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No card was detected in the card reader.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CardTypeException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CardTypeException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CardTypeException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The detected card is not supported by this library&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CertificateException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CertificateException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CertificateException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;There was an issue with the certification&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ConnectionException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.ConnectionException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConnectionException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An issue occurred in the communication with the reader&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DataException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.DataException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The reader returned an empty message.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DataValidationException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.DataValidationException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataValidationException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The sent data is not valid.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DerivationSelectionException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.DerivationSelectionException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DerivationSelectionException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not a valid derivation selection.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="KeySelectionException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.KeySelectionException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeySelectionException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not a valid key type selection&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="EOSKeyError">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.EOSKeyError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EOSKeyError</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The signature wasn&#39;t compatible with EOS standard after 10 tries&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="FirmwareException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.FirmwareException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FirmwareException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;There is an issue with the firmware on the card&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="GenuineCheckException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.GenuineCheckException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenuineCheckException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The detected card is not a genuine Cryptnox product.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="GenericException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.GenericException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenericException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic exception that can mean multiple things depending on the call to the card</span>
+
+<span class="sd">    Process stats and throw a specific Exception from it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenericException.__init__">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.GenericException.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="InitializationException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.InitializationException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InitializationException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The card hasn&#39;t been initialized.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="KeyAlreadyGenerated">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.KeyAlreadyGenerated">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeyAlreadyGenerated</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Key can not be generated twice.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SeedException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.SeedException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SeedException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Keys weren&#39;t found on the card.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="KeyGenerationException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.KeyGenerationException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeyGenerationException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error in key generation.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="PinAuthenticationException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.PinAuthenticationException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PinAuthenticationException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error in turning off PIN authentication. There is no user key in the card&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="PinException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.PinException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PinException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sent PIN code is not valid.</span>
+
+<span class="sd">    :param int number_of_retries: Number of retries to send the PIN code</span>
+<span class="sd">                                  before the card is locked.</span>
+<span class="sd">    :param str message: Optional message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PinException.__init__">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.PinException.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Invalid PIN code was provided&quot;</span><span class="p">,</span> <span class="n">number_of_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_retries</span> <span class="o">=</span> <span class="n">number_of_retries</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PukException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.PukException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PukException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sent PUK code is not valid.</span>
+
+<span class="sd">    :param int number_of_retries: Number of retries to send the PIN code</span>
+<span class="sd">                                  before the card is locked.</span>
+<span class="sd">    :param str message: Optional message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PukException.__init__">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.PukException.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Invalid PUK code was provided&quot;</span><span class="p">,</span> <span class="n">number_of_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_retries</span> <span class="o">=</span> <span class="n">number_of_retries</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ReadPublicKeyException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.ReadPublicKeyException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReadPublicKeyException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data received during public key reading is not valid.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ReaderException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.ReaderException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReaderException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Card reader wasn&#39;t found attached to the device.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SecureChannelException">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.SecureChannelException">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SecureChannelException</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Secure channel couldn&#39;t be established.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SoftLock">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.SoftLock">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SoftLock</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The card is soft locked, and requires power cycle before it can be opened&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CardNotBlocked">
+<a class="viewcode-back" href="../../cryptnox_sdk_py.html#cryptnox_sdk_py.exceptions.CardNotBlocked">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CardNotBlocked</span><span class="p">(</span><span class="n">CryptnoxException</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trying to unlock unblocked card&quot;&quot;&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

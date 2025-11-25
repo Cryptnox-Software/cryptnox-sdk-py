@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cryptnox_sdk_py.card.authenticity &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cryptnox_sdk_py
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cryptnox_sdk_py.card.authenticity</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cryptnox_sdk_py.card.authenticity</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module containing check for verification of genuineness of a card</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">secrets</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">aiohttp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography</span><span class="w"> </span><span class="kn">import</span> <span class="n">x509</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvalidSignature</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives</span><span class="w"> </span><span class="kn">import</span> <span class="n">hashes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives.asymmetric</span><span class="w"> </span><span class="kn">import</span> <span class="n">ec</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..binary_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_to_hexadecimal</span><span class="p">,</span> <span class="n">hexadecimal_to_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenuineCheckException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..enums</span><span class="w"> </span><span class="kn">import</span> <span class="n">Origin</span>
+
+<span class="n">_ECDSA_SHA256</span> <span class="o">=</span> <span class="s2">&quot;06082a8648ce3d040302&quot;</span> <span class="o">+</span> <span class="s2">&quot;03&quot;</span>
+<span class="n">_MANUFACTURER_CERTIFICATE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://verify.cryptnox.tech/certificates/&quot;</span>
+<span class="n">_PUBLIC_K1_OID</span> <span class="o">=</span> <span class="s2">&quot;2a8648ce3d030107034200&quot;</span>
+
+
+<div class="viewcode-block" id="origin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.authenticity.origin">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">origin</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Origin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check the origin of the card, whether it&#39;s a genuine</span>
+<span class="sd">    :param Connection connection: connection to use for the card</span>
+<span class="sd">    :param bool debug: print debug messages</span>
+
+<span class="sd">    :return: Whether the card on the connection is genuine</span>
+
+<span class="sd">    :rtype: Origin</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">certificates</span> <span class="o">=</span> <span class="n">_manufacturer_public_keys</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Origin</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">certificates</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Origin</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+    <span class="n">certificate</span> <span class="o">=</span> <span class="n">_manufacturer_certificate_data</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">)</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">_manufacturer_signature</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">)</span>
+
+    <span class="n">error</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">public_key</span> <span class="ow">in</span> <span class="n">certificates</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">_check_signature</span><span class="p">(</span><span class="n">certificate</span><span class="p">,</span> <span class="n">public_key</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">valid</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Origin</span><span class="o">.</span><span class="n">ORIGINAL</span>
+
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Origin</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+    <span class="k">return</span> <span class="n">Origin</span><span class="o">.</span><span class="n">FAKE</span></div>
+
+
+
+<div class="viewcode-block" id="session_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.authenticity.session_public_key">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">session_public_key</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the card in the reader is genuine Cryptnox product</span>
+
+<span class="sd">    :param Connection connection: Connection to use for operation</span>
+<span class="sd">    :param bool debug: Prints information about communication</span>
+
+<span class="sd">    :return: Session public key to use opening secure channel</span>
+<span class="sd">    :rtype: str</span>
+
+<span class="sd">    :raise GenuineCheckException: The card is not genuine</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">card_cert_hex</span> <span class="o">=</span> <span class="n">_get_card_certificate</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">)</span>
+    <span class="n">card_cert_msg</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">card_cert_hex</span><span class="p">[:</span><span class="mi">148</span><span class="p">])</span>
+    <span class="n">card_cert_sig_hex</span> <span class="o">=</span> <span class="n">card_cert_hex</span><span class="p">[</span><span class="mi">148</span><span class="p">:]</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Card msg&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">card_cert_msg</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Card sig&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">card_cert_sig_hex</span><span class="p">)</span>
+
+    <span class="n">public_key</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">EllipticCurvePublicKey</span><span class="o">.</span><span class="n">from_encoded_point</span><span class="p">(</span><span class="n">ec</span><span class="o">.</span><span class="n">SECP256R1</span><span class="p">(),</span>
+                                                              <span class="n">_public_key</span><span class="p">(</span><span class="n">connection</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_check_signature</span><span class="p">(</span><span class="n">card_cert_msg</span><span class="p">,</span> <span class="n">public_key</span><span class="p">,</span> <span class="n">card_cert_sig_hex</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">GenuineCheckException</span><span class="p">(</span><span class="s2">&quot;Wrong card signature&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">card_cert_hex</span><span class="p">[</span><span class="mi">18</span><span class="p">:</span><span class="mi">148</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="manufacturer_certificate">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.authenticity.manufacturer_certificate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">manufacturer_certificate</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the manufacturer certificate from the card in connection.</span>
+
+<span class="sd">    :param Connection connection: Connection to use for operation</span>
+<span class="sd">    :param bool debug: Prints information about communication</span>
+
+<span class="sd">    :return: Manufacturer certificate read from the card</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF7</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">apdu</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF7</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">response</span> <span class="o">+</span> <span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">apdu</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">response</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">certificate</span> <span class="o">=</span> <span class="n">list_to_hexadecimal</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Manufacturer certificate: </span><span class="si">{</span><span class="n">certificate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">certificate</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manufacturer_public_keys</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+            <span class="n">certificate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">x509</span><span class="o">.</span><span class="n">load_pem_x509_certificate</span><span class="p">(</span><span class="n">certificate</span><span class="p">)</span><span class="o">.</span><span class="n">public_key</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_all</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">certificates</span><span class="p">):</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">_MANUFACTURER_CERTIFICATE_URL</span> <span class="o">+</span> <span class="n">certificate</span><span class="p">))</span>
+                 <span class="k">for</span> <span class="n">certificate</span> <span class="ow">in</span> <span class="n">certificates</span><span class="p">]</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_certificates</span><span class="p">():</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_MANUFACTURER_CERTIFICATE_URL</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">certificates</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;href=&quot;(.+?crt)&quot;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF8&quot;</span><span class="p">))</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">fetch_all</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">certificates</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">WindowsSelectorEventLoopPolicy</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fetch_certificates</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_signature</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">public_key</span><span class="p">:</span> <span class="n">ec</span><span class="o">.</span><span class="n">EllipticCurvePublicKey</span><span class="p">,</span>
+                     <span class="n">signature_hex</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">public_key</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">signature_hex</span><span class="p">),</span> <span class="n">message</span><span class="p">,</span> <span class="n">ec</span><span class="o">.</span><span class="n">ECDSA</span><span class="p">(</span><span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()))</span>
+    <span class="k">except</span> <span class="n">InvalidSignature</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_certificate_parts</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># car pub hex 65B after r1:2a8648ce3d030107034200 k1:2b8104000a034200</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">manufacturer_certificate</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">_PUBLIC_K1_OID</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">GenuineCheckException</span><span class="p">(</span><span class="s2">&quot;No ECDSA r1 Public key found&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parts</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_public_key</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">public_key</span> <span class="o">=</span> <span class="n">_certificate_parts</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="mi">130</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;card public key hex&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">public_key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">public_key</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manufacturer_certificate_data</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="c1"># datacert_hex : prem partie + 2a8648ce3d030107034200 + pubhex</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">_certificate_parts</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">8</span><span class="p">:]</span> <span class="o">+</span>
+                           <span class="n">_PUBLIC_K1_OID</span><span class="p">)</span> <span class="o">+</span> <span class="n">_public_key</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Manufacturer data&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_card_certificate</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">nonce</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">randbits</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">nonce_list</span> <span class="o">=</span> <span class="n">hexadecimal_to_list</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%0.16X</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nonce</span><span class="p">)</span>
+    <span class="n">certificate</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF8</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">]</span> <span class="o">+</span> <span class="n">nonce_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">card_cert_hex</span> <span class="o">=</span> <span class="n">list_to_hexadecimal</span><span class="p">(</span><span class="n">certificate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Card cert&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">card_cert_hex</span><span class="p">)</span>
+    <span class="c1"># C ?</span>
+    <span class="k">if</span> <span class="n">card_cert_hex</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;43&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bad card certificate header&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="c1"># Nonce?</span>
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">card_cert_hex</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">18</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nonce</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Card certificate nonce is not the one provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">card_cert_hex</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manufacturer_signature</span><span class="p">(</span><span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">certificate_parts</span> <span class="o">=</span> <span class="n">manufacturer_certificate</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
+                                                 <span class="n">debug</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">_ECDSA_SHA256</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">certificate_parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">signature_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">signature_length</span>
+
+    <span class="k">if</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;00&quot;</span><span class="p">:</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">:]</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mft cert sig hex&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">signature</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

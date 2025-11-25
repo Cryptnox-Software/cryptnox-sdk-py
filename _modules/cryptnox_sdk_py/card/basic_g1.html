@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cryptnox_sdk_py.card.basic_g1 &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cryptnox_sdk_py
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cryptnox_sdk_py.card.basic_g1</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cryptnox_sdk_py.card.basic_g1</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module containing class for Basic card of 1st generation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NamedTuple</span><span class="p">,</span>
+    <span class="n">Tuple</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives.asymmetric</span><span class="w"> </span><span class="kn">import</span> <span class="n">ec</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">base</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.custom_bits</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomBits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.user_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..binary_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">path_to_bytes</span><span class="p">,</span> <span class="n">binary_to_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cryptos</span><span class="w"> </span><span class="kn">import</span> <span class="n">encode_pubkey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..enums</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Derivation</span><span class="p">,</span>
+    <span class="n">KeyType</span><span class="p">,</span>
+    <span class="n">SeedSource</span><span class="p">,</span>
+    <span class="n">SlotIndex</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="BasicG1">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BasicG1</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class containing functionality for Basic cards of the 1st generation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">select_apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xA0</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">]</span>
+    <span class="n">puk_rule</span> <span class="o">=</span> <span class="s2">&quot;12 ASCII characters&quot;</span>
+
+    <span class="n">_ALGORITHM</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">SECP256R1</span>
+    <span class="n">PUK_LENGTH</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">MAX_ASCII_LENGTH</span> <span class="o">=</span> <span class="mi">128</span>
+
+    <span class="n">_INITIALIZATION_FLAG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;01000000&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">_SEED_FLAG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;00100000&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">_PIN_AUTH_FLAG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;00010000&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">_PINLESS_FLAG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;00001000&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">_EXTENDED_PUBLIC_KEY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;00000100&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.__init__">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_data</span> <span class="o">=</span> <span class="n">UserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reading_index_offset</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_bits</span> <span class="o">=</span> <span class="n">CustomBits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_custom_bytes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.change_pairing_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.change_pairing_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_pairing_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pairing_key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairing_key</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Pairing key has to be 32 bytes.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Index must be 0&quot;</span><span class="p">)</span>
+
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xDA</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">pairing_key</span> <span class="o">+</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.derive">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.derive">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">derive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no seed on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD1</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+        <span class="n">binary_path</span> <span class="o">=</span> <span class="n">path_to_bytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">binary_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.dual_seed_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.dual_seed_public_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dual_seed_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">==</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span><span class="p">:</span>
+            <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">65</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataException</span><span class="p">(</span><span class="s2">&quot;Bad data received. Dual seed read card public key&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.dual_seed_load">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.dual_seed_load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dual_seed_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">==</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span><span class="p">:</span>
+            <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">data</span> <span class="o">+</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extended_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_EXTENDED_PUBLIC_KEY</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.generate_random_number">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.generate_random_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_random_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Checksum has to be an integer&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">if</span> <span class="mi">16</span> <span class="o">&gt;</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">64</span> <span class="ow">or</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Checksum value must be between 4 and 8.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD3</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.generate_seed">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.generate_seed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">!=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">USER_KEY</span><span class="p">:</span>
+            <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD4</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x86</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">KeyAlreadyGenerated</span><span class="p">(</span><span class="s2">&quot;The card already has a key generated</span><span class="se">\n\n</span><span class="s2">It is not possible to &quot;</span>
+                                                     <span class="s2">&quot;generate another one without resetting the card&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_SEED_FLAG</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.get_manufacturer_certificate">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.get_manufacturer_certificate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_manufacturer_certificate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idx_page</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">mnft_cert_resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF7</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">idx_page</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">certlen</span> <span class="o">=</span> <span class="p">(</span><span class="n">mnft_cert_resp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">mnft_cert_resp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">mnft_cert_resp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">certlen</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">idx_page</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">mnft_cert_resp</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">mnft_cert_resp</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF7</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">idx_page</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mnft_cert_resp</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">certlen</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">cert</span> <span class="o">=</span> <span class="n">mnft_cert_resp</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%0.2x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cert</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.get_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.get_public_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="n">Derivation</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                       <span class="n">compressed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hexed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">derivation</span> <span class="o">==</span> <span class="n">Derivation</span><span class="o">.</span><span class="n">CURRENT_KEY</span> <span class="ow">and</span> <span class="n">path</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Path must be empty for current path&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no seed on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">key_type</span> <span class="o">=</span> <span class="n">KeyType</span><span class="p">(</span><span class="n">key_type</span><span class="p">)</span>
+        <span class="n">derivation</span> <span class="o">=</span> <span class="n">Derivation</span><span class="p">(</span><span class="n">derivation</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">derivation</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Derivation</span><span class="o">.</span><span class="n">PINLESS_PATH</span><span class="p">,</span>
+                          <span class="n">Derivation</span><span class="o">.</span><span class="n">DERIVE_AND_MAKE_CURRENT</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DerivationSelectionException</span><span class="p">(</span><span class="s2">&quot;This operation doesn&#39;t support this derivation form&quot;</span><span class="p">)</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC2</span><span class="p">,</span> <span class="n">derivation</span> <span class="o">+</span> <span class="n">key_type</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">binary_path</span> <span class="o">=</span> <span class="n">path_to_bytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">binary_path</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span> <span class="k">if</span> <span class="n">hexed</span> <span class="k">else</span> <span class="n">data</span>
+        <span class="k">if</span> <span class="n">compressed</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;bin_compressed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.get_public_key_extended">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.get_public_key_extended">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key_extended</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no seed on the card&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Step 1: Try to enable XPUB capability if PUK provided</span>
+        <span class="k">if</span> <span class="n">puk</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">enable_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>  <span class="c1"># status=1 to enable + PUK bytes</span>
+                <span class="n">enable_apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC5</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">enable_apdu</span><span class="p">,</span> <span class="n">enable_data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="c1"># If enabling fails, continue anyway - it might already be enabled</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># Step 2: Build APDU to get extended public key</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="mh">0x00</span> <span class="k">if</span> <span class="n">key_type</span> <span class="o">==</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span> <span class="k">else</span> <span class="mh">0x10</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="mh">0x02</span>  <span class="c1"># extended public key (BIP32)</span>
+        <span class="n">get_apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span>
+
+        <span class="c1"># Send command and get response</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">get_apdu</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return hex string result</span>
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.get_public_key_clear">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.get_public_key_clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">compressed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+
+        <span class="c1"># Validate inputs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no seed on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">SELe</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">derivation</span><span class="p">),</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">pubkeyl</span><span class="p">,</span> <span class="n">status1</span><span class="p">,</span> <span class="n">status2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">SELe</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Only for testing, should throw error</span>
+            <span class="n">path_bin</span> <span class="o">=</span> <span class="n">path_to_bytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">pubkeyl</span><span class="p">,</span> <span class="n">status1</span><span class="p">,</span> <span class="n">status2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">SELe</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path_bin</span><span class="p">)]</span> <span class="o">+</span> <span class="n">binary_to_list</span><span class="p">(</span><span class="n">path_bin</span><span class="p">))</span>
+
+        <span class="c1"># Check if we got an error status</span>
+        <span class="k">if</span> <span class="n">status1</span> <span class="o">!=</span> <span class="mh">0x90</span> <span class="ow">or</span> <span class="n">status2</span> <span class="o">!=</span> <span class="mh">0x00</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ReadPublicKeyException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Card returned error status: </span><span class="si">{</span><span class="n">status1</span><span class="si">:</span><span class="s2">02x</span><span class="si">}{</span><span class="n">status2</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">pubkey</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">pubkeyl</span><span class="p">)</span>
+
+        <span class="c1"># Handle different public key formats returned by the card</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="c1"># Card returned only X-coordinate (32 bytes)</span>
+            <span class="c1"># This is common for clear channel public key reading</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received 32-byte public key (x-coordinate): </span><span class="si">{</span><span class="n">pubkey</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pubkey</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span> <span class="o">==</span> <span class="mi">33</span> <span class="ow">and</span> <span class="n">pubkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">]:</span>
+            <span class="c1"># Compressed format (33 bytes starting with 0x02 or 0x03)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">compressed</span><span class="p">:</span>
+                <span class="c1"># Would need to decompress, but for now return as-is</span>
+                <span class="k">return</span> <span class="n">pubkey</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pubkey</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span> <span class="o">==</span> <span class="mi">65</span> <span class="ow">and</span> <span class="n">pubkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x04</span><span class="p">:</span>
+            <span class="c1"># Card returned uncompressed public key (65 bytes)</span>
+            <span class="k">if</span> <span class="n">compressed</span><span class="p">:</span>
+                <span class="n">pub_bin</span> <span class="o">=</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="s2">&quot;bin_compressed&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">pub_bin</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pubkey</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Unknown format, return as-is</span>
+            <span class="k">return</span> <span class="n">pubkey</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.decrypt">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.decrypt">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">encrypted_data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+
+        <span class="c1"># Validate inputs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;No seed/key loaded&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;P1 must be 0 (output symmetric key) or 1 (decrypt data)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">65</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Public key must be 65 bytes (X9.62 uncompressed format)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pubkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x04</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Public key must be in X9.62 uncompressed format (0x04|X|Y)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Prepare data based on P1 and authentication status</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Add PIN if provided (right-padded with 0x00 to 9 bytes)</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="p">:</span>
+            <span class="n">pin_bytes</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pin_bytes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;PIN too long (max 9 characters)&quot;</span><span class="p">)</span>
+            <span class="n">pin_padded</span> <span class="o">=</span> <span class="n">pin_bytes</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pin_bytes</span><span class="p">))</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">pin_padded</span>
+
+        <span class="c1"># Add public key</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="n">pubkey</span>
+
+        <span class="c1"># Add encrypted data if P1=1</span>
+        <span class="k">if</span> <span class="n">p1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">encrypted_data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Encrypted data required when P1=1&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Check if data length is multiple of 16 bytes (AES block size)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">encrypted_data</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Encrypted data length must be multiple of 16 bytes&quot;</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">encrypted_data</span>
+
+        <span class="c1"># Validate total data length</span>
+        <span class="k">if</span> <span class="n">p1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># P1 = 0: No user key auth, with PIN: 74 bytes, User key auth, no PIN: 65 bytes</span>
+            <span class="n">expected_length</span> <span class="o">=</span> <span class="mi">74</span> <span class="k">if</span> <span class="n">pin</span> <span class="k">else</span> <span class="mi">65</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected_length</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Data length incorrect: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes (expected </span><span class="si">{</span><span class="n">expected_length</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># P1 = 1: No user key auth, with PIN: at least 74 bytes, User key auth, no PIN: at least 65 bytes</span>
+            <span class="n">min_length</span> <span class="o">=</span> <span class="mi">74</span> <span class="k">if</span> <span class="n">pin</span> <span class="k">else</span> <span class="mi">65</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_length</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Data length too short: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes (minimum </span><span class="si">{</span><span class="n">min_length</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Send DECRYPT command</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC4</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x85</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;No seed/key loaded&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">elif</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x63</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span><span class="p">(</span><span class="s2">&quot;PIN is not correct&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">elif</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x6A</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Data length is not correct&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">elif</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x82</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span><span class="p">(</span><span class="s2">&quot;Data input length is far too long&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.history">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NamedTuple</span><span class="p">:</span>
+        <span class="n">Entry</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;HistoryEntry&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;signing_counter&#39;</span><span class="p">,</span> <span class="s1">&#39;hashed_data&#39;</span><span class="p">])</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFB</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Entry</span><span class="p">(</span><span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;big&quot;</span><span class="p">),</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_INITIALIZATION_FLAG</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.load_wrapped_seed">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.load_wrapped_seed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_wrapped_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">==</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span><span class="p">:</span>
+            <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">seed</span> <span class="o">+</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x86</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">KeyAlreadyGenerated</span><span class="p">(</span><span class="s2">&quot;The card already has a key generated</span><span class="se">\n\n</span><span class="s2">It is not possible to &quot;</span>
+                                                     <span class="s2">&quot;generate another one without resetting the card&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_SEED_FLAG</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.load_seed">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.load_seed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">==</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span><span class="p">:</span>
+            <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">seed</span> <span class="o">+</span> <span class="n">pin</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x86</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">KeyAlreadyGenerated</span><span class="p">(</span><span class="s2">&quot;The card already has a key generated</span><span class="se">\n\n</span><span class="s2">It is not possible to &quot;</span>
+                                                     <span class="s2">&quot;generate another one without resetting the card&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_SEED_FLAG</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pin_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_PIN_AUTH_FLAG</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pinless_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_PINLESS_FLAG</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.reset">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.reset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">NO_AUTH</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">seed_source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SeedSource</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span>
+
+        <span class="k">return</span> <span class="n">SeedSource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<div class="viewcode-block" id="BasicG1.set_pin_authentication">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_pin_authentication">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pin_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">status</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">status</span> <span class="o">+</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x86</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinAuthenticationException</span><span class="p">(</span><span class="s2">&quot;PIN can&#39;t be set without user key.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_PIN_AUTH_FLAG</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.set_pinless_path">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_pinless_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pinless_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no seed on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path_to_bytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x6A</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Path length not multiple of 4&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x83</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Path doesn&#39;t start with EIP1581 path&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x85</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;No seed or extended key&quot;</span><span class="p">)</span>
+
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_PINLESS_FLAG</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.set_extended_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_extended_public_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_extended_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set extended public key capability.</span>
+
+<span class="sd">        This is a convenience wrapper around set_pubexport(status, 0, puk).</span>
+<span class="sd">        Use set_pubexport() directly for more control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pubexport</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">puk</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">signing_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">position</span><span class="p">:],</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.user_key_add">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">data_info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">public_key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">puk_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="n">cred_id</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data_info_length</span> <span class="o">=</span> <span class="mi">64</span>
+        <span class="n">puk_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk_code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_info</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">data_info_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data info can&#39;t be longer than </span><span class="si">{</span><span class="n">data_info_length</span><span class="si">}</span><span class="s2"> characters&quot;</span><span class="p">)</span>
+
+        <span class="n">data_info</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\0</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">data_info_length</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_info</span><span class="p">))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">slot</span><span class="p">])</span> <span class="o">+</span> <span class="n">data_info</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slot</span> <span class="o">==</span> <span class="n">SlotIndex</span><span class="o">.</span><span class="n">FIDO</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cred_id</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Cred id is required&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="nb">bytes</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">cred_id</span><span class="p">)])</span> <span class="o">+</span> <span class="n">cred_id</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="n">public_key</span> <span class="o">+</span> <span class="n">puk_code</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD5</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6A80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid slot index&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6984</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid public key&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6986</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Slot not empty&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6700</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid data length&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_set_bit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">slot</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_delete">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_delete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">puk_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">puk_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk_code</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">slot</span><span class="o">.</span><span class="n">value</span><span class="p">])</span> <span class="o">+</span> <span class="n">puk_code</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD7</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6A80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid slot index&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6700</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid data length&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6986</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Slot empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_clear_bit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">slot</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_info">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_info">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFA</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot</span><span class="p">),</span> <span class="mh">0x00</span><span class="p">],</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6985</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SecureChannelException</span><span class="p">(</span><span class="s2">&quot;Command may need a secured channel&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="p">[:</span><span class="mi">64</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">),</span> <span class="n">result</span><span class="p">[</span><span class="mi">64</span><span class="p">:]</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_enabled">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_enabled">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot_index</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">slot_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_challenge_response_nonce">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_challenge_response_nonce">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_challenge_response_nonce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD6</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_challenge_response_open">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_challenge_response_open">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_challenge_response_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">slot</span><span class="o">.</span><span class="n">value</span><span class="p">])</span> <span class="o">+</span> <span class="n">signature</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD6</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6A80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid slot index&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6985</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Nonce not found&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0x01</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">USER_KEY</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.user_key_signature_open">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.user_key_signature_open">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_signature_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">slot</span><span class="o">.</span><span class="n">value</span><span class="p">])</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="n">signature</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xD6</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6A80</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Invalid slot index&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0x01</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.generate_seed_wrapper">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.generate_seed_wrapper">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_seed_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Size must be a multiple of 8&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">size_bytes</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;big&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xF9</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="n">size_bytes</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.sign_public">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.sign_public">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sign_public</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="s2">&quot;NO_SEED&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no key on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">CLA</span> <span class="o">=</span> <span class="mh">0x80</span>
+        <span class="n">INS</span> <span class="o">=</span> <span class="mh">0xC6</span>
+        <span class="n">P1</span> <span class="o">=</span> <span class="n">key_type</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">key_type</span> <span class="o">==</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">R1</span> <span class="k">else</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">P2</span> <span class="o">=</span> <span class="mh">0x00</span>
+        <span class="n">DATA</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+        <span class="n">apdu_command</span> <span class="o">=</span> <span class="p">[</span><span class="n">CLA</span><span class="p">,</span> <span class="n">INS</span><span class="p">,</span> <span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">]</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">apdu_command</span><span class="p">,</span> <span class="n">DATA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.sign">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.sign">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="n">Derivation</span> <span class="o">=</span> <span class="n">Derivation</span><span class="o">.</span><span class="n">CURRENT_KEY</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span>
+             <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_eos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed_source</span> <span class="o">==</span> <span class="n">SeedSource</span><span class="o">.</span><span class="n">NO_SEED</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SeedException</span><span class="p">(</span><span class="s2">&quot;There is no key on the card&quot;</span><span class="p">)</span>
+
+        <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span> <span class="k">if</span> <span class="n">pin</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">derivation</span> <span class="o">=</span> <span class="n">Derivation</span><span class="p">(</span><span class="n">derivation</span><span class="p">)</span>
+        <span class="n">key_type</span> <span class="o">=</span> <span class="n">KeyType</span><span class="p">(</span><span class="n">key_type</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">derivation</span> <span class="o">==</span> <span class="n">Derivation</span><span class="o">.</span><span class="n">DERIVE_AND_MAKE_CURRENT</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">derivation</span> <span class="o">==</span> <span class="n">Derivation</span><span class="o">.</span><span class="n">PINLESS_PATH</span> <span class="ow">and</span> <span class="n">key_type</span> <span class="o">==</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">R1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DerivationSelectionException</span><span class="p">(</span><span class="s2">&quot;This operation doesn&#39;t support this derivation form&quot;</span><span class="p">)</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC0</span><span class="p">,</span> <span class="n">derivation</span> <span class="o">+</span> <span class="n">key_type</span><span class="p">,</span> <span class="mh">0x01</span> <span class="k">if</span> <span class="n">filter_eos</span> <span class="k">else</span> <span class="mh">0x00</span><span class="p">]</span>
+
+        <span class="n">derivation_base</span> <span class="o">=</span> <span class="p">(</span><span class="n">derivation</span> <span class="o">+</span> <span class="n">key_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x0F</span>
+        <span class="k">if</span> <span class="n">derivation_base</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">path_to_bytes</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pin</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span> <span class="ow">or</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x30</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">NO_AUTH</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataException</span><span class="p">(</span><span class="s2">&quot;Invalid data received during signature&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">valid_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">_SEED_FLAG</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.valid_puk">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.valid_puk">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;puk&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span> <span class="o">!=</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">PUK_LENGTH</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">puk_name</span><span class="si">}</span><span class="s2"> must have </span><span class="si">{</span><span class="n">BasicG1</span><span class="o">.</span><span class="n">PUK_LENGTH</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                                     <span class="sa">f</span><span class="s2">&quot;ASCII characters&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">BasicG1</span><span class="o">.</span><span class="n">MAX_ASCII_LENGTH</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">puk</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">puk_name</span><span class="si">}</span><span class="s2"> must contain only ASCII characters.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">puk</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.verify_pin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.verify_pin">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verify_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+        <span class="n">apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">apdu</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+            <span class="n">apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">apdu</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SecureChannelException</span> <span class="k">as</span> <span class="n">sc_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SoftLock</span><span class="p">(</span><span class="s2">&quot;The card is soft locked. Power cycle required before it can be used &quot;</span>
+                                          <span class="s2">&quot;again.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sc_error</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6700</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Incorrect length&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mh">0x6986</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;PIN authentication disabled&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clear_bit</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bit</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bit</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">([</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFA</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">],</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">GenericException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x69</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x85</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SecureChannelException</span><span class="p">(</span><span class="s2">&quot;Command may need a secured channel&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">base</span><span class="o">.</span><span class="n">User</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">CryptnoxException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">base</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">name_length</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">name_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+        <span class="n">email_length</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">name_length</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">start</span><span class="p">]</span>
+        <span class="n">user_list_offset</span> <span class="o">=</span> <span class="n">email_length</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">name_length</span> <span class="o">+</span> <span class="n">start</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">name_length</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span><span class="n">user_list_offset</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">base</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_bit</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bit</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bit</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_custom_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFC</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicG1.set_pubexport">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_pubexport">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pubexport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">p1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;P1 must be 0 (xpub) or 1 (clear pubkey)&quot;</span><span class="p">)</span>
+
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC5</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">statbin</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01</span><span class="s2">&quot;</span>  <span class="c1"># Enable</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">statbin</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>  <span class="c1"># Disable</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">statbin</span> <span class="o">+</span> <span class="n">puk</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.set_xpubread">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_xpubread">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_xpubread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pubexport</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">puk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xpubread</span> <span class="o">=</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="BasicG1.set_clearpubkey">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.basic_g1.BasicG1.set_clearpubkey">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_clearpubkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pubexport</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">puk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearpubrd</span> <span class="o">=</span> <span class="n">status</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

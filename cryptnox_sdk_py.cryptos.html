@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cryptnox_sdk_py.cryptos package &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="cryptnox_sdk_py.card package" href="cryptnox_sdk_py.card.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cryptnox_sdk_py
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cryptnox_sdk_py.html">cryptnox_sdk_py package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cryptnox_sdk_py.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cryptnox_sdk_py.card.html">cryptnox_sdk_py.card package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cryptnox_sdk_py.cryptos package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-binary-utils-module">cryptnox_sdk_py.binary_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-connection-module">cryptnox_sdk_py.connection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-crypto-utils-module">cryptnox_sdk_py.crypto_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-enums-module">cryptnox_sdk_py.enums module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-exceptions-module">cryptnox_sdk_py.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-factory-module">cryptnox_sdk_py.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox-sdk-py-reader-module">cryptnox_sdk_py.reader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cryptnox_sdk_py.html#module-cryptnox_sdk_py">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="cryptnox_sdk_py.html">cryptnox_sdk_py package</a></li>
+      <li class="breadcrumb-item active">cryptnox_sdk_py.cryptos package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cryptnox_sdk_py.cryptos.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cryptnox-sdk-py-cryptos-package">
+<h1>cryptnox_sdk_py.cryptos package<a class="headerlink" href="#cryptnox-sdk-py-cryptos-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="cryptnox-sdk-py-cryptos-main-module">
+<h2>cryptnox_sdk_py.cryptos.main module<a class="headerlink" href="#cryptnox-sdk-py-cryptos-main-module" title="Link to this heading"></a></h2>
+<p id="module-cryptnox_sdk_py.cryptos.main">Module containing core cryptographic functions for Cryptnox cards.</p>
+<p>Provides elliptic curve cryptography (secp256k1), key generation,
+digital signatures, and cryptocurrency address generation.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.change_curve">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">change_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#change_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.change_curve" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.getG">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">getG</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#getG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.getG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.inv">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">inv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#inv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.inv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.access">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">access</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#access"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.access" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.multiaccess">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">multiaccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#multiaccess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.multiaccess" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.slice">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1606938044258990275541962092341162602522202993782792835301376</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.slice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.count">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.sum">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.sum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.isinf">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">isinf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#isinf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.isinf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.to_jacobian">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">to_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#to_jacobian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.to_jacobian" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.jacobian_double">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">jacobian_double</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#jacobian_double"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.jacobian_double" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.jacobian_add">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">jacobian_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#jacobian_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.jacobian_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.fast_add">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">fast_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#fast_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.fast_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.get_pubkey_format">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">get_pubkey_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#get_pubkey_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.get_pubkey_format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.encode_pubkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">encode_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#encode_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.encode_pubkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.decode_pubkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">decode_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#decode_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.decode_pubkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.get_privkey_format">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">get_privkey_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#get_privkey_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.get_privkey_format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.encode_privkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">encode_privkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vbyte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#encode_privkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.encode_privkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.decode_privkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">decode_privkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#decode_privkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.decode_privkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.add_pubkeys">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">add_pubkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#add_pubkeys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.add_pubkeys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.add_privkeys">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">add_privkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#add_privkeys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.add_privkeys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.divide">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">privkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#divide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.divide" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.compress">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.compress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.decompress">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">decompress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#decompress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.decompress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.neg_pubkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">neg_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#neg_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.neg_pubkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.neg_privkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">neg_privkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">privkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#neg_privkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.neg_privkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.subtract_pubkeys">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">subtract_pubkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#subtract_pubkeys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.subtract_pubkeys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.subtract_privkeys">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">subtract_privkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#subtract_privkeys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.subtract_privkeys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.bin_hash160">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">bin_hash160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#bin_hash160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.bin_hash160" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.hash160">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">hash160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#hash160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.hash160" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.hex_to_hash160">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">hex_to_hash160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_hex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#hex_to_hash160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.hex_to_hash160" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.bin_sha256">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">bin_sha256</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#bin_sha256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.bin_sha256" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.sha256">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">sha256</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#sha256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.sha256" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.bin_ripemd160">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">bin_ripemd160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#bin_ripemd160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.bin_ripemd160" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.ripemd160">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">ripemd160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#ripemd160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.ripemd160" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.bin_dbl_sha256">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">bin_dbl_sha256</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#bin_dbl_sha256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.bin_dbl_sha256" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.dbl_sha256">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">dbl_sha256</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#dbl_sha256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.dbl_sha256" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.bin_slowsha">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">bin_slowsha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#bin_slowsha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.bin_slowsha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.slowsha">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">slowsha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#slowsha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.slowsha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.hash_to_int">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">hash_to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#hash_to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.hash_to_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.num_to_var_int">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">num_to_var_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#num_to_var_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.num_to_var_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.electrum_sig_hash">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">electrum_sig_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#electrum_sig_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.electrum_sig_hash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.b58check_to_bin">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">b58check_to_bin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#b58check_to_bin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.b58check_to_bin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.get_version_byte">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">get_version_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#get_version_byte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.get_version_byte" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.hex_to_b58check">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">hex_to_b58check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magicbyte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#hex_to_b58check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.hex_to_b58check" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.b58check_to_hex">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">b58check_to_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#b58check_to_hex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.b58check_to_hex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.pubkey_to_hash">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">pubkey_to_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#pubkey_to_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.pubkey_to_hash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.pubkey_to_hash_hex">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">pubkey_to_hash_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#pubkey_to_hash_hex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.pubkey_to_hash_hex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.pubkey_to_address">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">pubkey_to_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magicbyte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#pubkey_to_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.pubkey_to_address" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.pubtoaddr">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">pubtoaddr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magicbyte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.pubtoaddr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.is_privkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">is_privkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#is_privkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.is_privkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.is_pubkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">is_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#is_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.is_pubkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.encode_sig">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">encode_sig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#encode_sig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.encode_sig" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.decode_sig">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">decode_sig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#decode_sig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.decode_sig" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.deterministic_generate_k">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">deterministic_generate_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msghash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#deterministic_generate_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.deterministic_generate_k" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.ecdsa_verify_addr">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">ecdsa_verify_addr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#ecdsa_verify_addr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.ecdsa_verify_addr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.ecdsa_verify">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">ecdsa_verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#ecdsa_verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.ecdsa_verify" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.add">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.subtract">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#subtract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.subtract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.main.magicbyte_to_prefix">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.main.</span></span><span class="sig-name descname"><span class="pre">magicbyte_to_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magicbyte</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#magicbyte_to_prefix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.main.magicbyte_to_prefix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="cryptnox-sdk-py-cryptos-py2specials-module">
+<h2>cryptnox_sdk_py.cryptos.py2specials module<a class="headerlink" href="#cryptnox-sdk-py-cryptos-py2specials-module" title="Link to this heading"></a></h2>
+<p id="module-cryptnox_sdk_py.cryptos.py2specials">Module containing Python 2 compatibility utilities.</p>
+<p>Provides type definitions, string/bytes handling, and encoding
+utilities for Python 2 compatibility in cryptographic operations.</p>
+</section>
+<section id="cryptnox-sdk-py-cryptos-py3specials-module">
+<h2>cryptnox_sdk_py.cryptos.py3specials module<a class="headerlink" href="#cryptnox-sdk-py-cryptos-py3specials-module" title="Link to this heading"></a></h2>
+<p id="module-cryptnox_sdk_py.cryptos.py3specials">Module containing Python 3 specific cryptographic implementations.</p>
+<p>Provides Python 3 optimized cryptographic functions including
+elliptic curve operations, ECDSA signing/verification, and
+mathematical utilities for secp256k1 operations.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.bin_dbl_sha256">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">bin_dbl_sha256</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#bin_dbl_sha256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.bin_dbl_sha256" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.lpad">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">lpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#lpad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.lpad" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.get_code_string">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">get_code_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#get_code_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.get_code_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.changebase">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">changebase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#changebase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.changebase" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.bin_to_b58check">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">bin_to_b58check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magicbyte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#bin_to_b58check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.bin_to_b58check" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.bytes_to_hex_string">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">bytes_to_hex_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#bytes_to_hex_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.bytes_to_hex_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.safe_from_hex">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">safe_from_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#safe_from_hex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.safe_from_hex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.from_int_representation_to_bytes">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">from_int_representation_to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#from_int_representation_to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.from_int_representation_to_bytes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.from_int_to_byte">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">from_int_to_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#from_int_to_byte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.from_int_to_byte" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.from_byte_to_int">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">from_byte_to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#from_byte_to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.from_byte_to_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.from_string_to_bytes">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">from_string_to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#from_string_to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.from_string_to_bytes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.safe_hexlify">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">safe_hexlify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#safe_hexlify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.safe_hexlify" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.encode">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.encode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.decode">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#decode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.decode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.py3specials.random_string">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.py3specials.</span></span><span class="sig-name descname"><span class="pre">random_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/py3specials.html#random_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.py3specials.random_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="cryptnox-sdk-py-cryptos-ripemd-module">
+<h2>cryptnox_sdk_py.cryptos.ripemd module<a class="headerlink" href="#cryptnox-sdk-py-cryptos-ripemd-module" title="Link to this heading"></a></h2>
+<p id="module-cryptnox_sdk_py.cryptos.ripemd">Module containing RIPEMD-160 hash algorithm implementation.</p>
+<p>Pure Python implementation of the RIPEMD-160 cryptographic hash function.
+Used for generating Bitcoin addresses and other cryptographic operations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">RIPEMD160</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Return a new RIPEMD160 object. An optional string argument
+may be provided; if present, this string will be automatically
+hashed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.digest">
+<span class="sig-name descname"><span class="pre">digest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160.digest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.digest" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.hexdigest">
+<span class="sig-name descname"><span class="pre">hexdigest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160.hexdigest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.hexdigest" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RIPEMD160.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RIPEMD160.copy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.new">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.new" title="Link to this definition"></a></dt>
+<dd><p>Return a new RIPEMD160 object. An optional string argument
+may be provided; if present, this string will be automatically
+hashed.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMDContext">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">RMDContext</span></span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMDContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMDContext" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMDContext.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMDContext.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMDContext.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMDContext.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMDContext.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMDContext.copy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.ROL">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">ROL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#ROL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.ROL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.F0">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">F0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#F0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.F0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.F1">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">F1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#F1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.F1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.F2">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">F2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#F2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.F2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.F3">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">F3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#F3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.F3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.F4">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">F4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#F4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.F4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.R">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">R</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#R"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.R" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMD160Transform">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">RMD160Transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMD160Transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMD160Transform" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMD160Update">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">RMD160Update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMD160Update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMD160Update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.ripemd.RMD160Final">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.ripemd.</span></span><span class="sig-name descname"><span class="pre">RMD160Final</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/ripemd.html#RMD160Final"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.ripemd.RMD160Final" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cryptnox_sdk_py.cryptos">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cryptnox_sdk_py.cryptos" title="Link to this heading"></a></h2>
+<p>Module containing cryptographic utilities for Cryptnox cards.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.cryptos.encode_pubkey">
+<span class="sig-prename descclassname"><span class="pre">cryptnox_sdk_py.cryptos.</span></span><span class="sig-name descname"><span class="pre">encode_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/cryptos/main.html#encode_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.cryptos.encode_pubkey" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p>The <code class="docutils literal notranslate"><span class="pre">cryptnox_sdk_py.cryptos</span></code> package contains cryptographic utilities for Cryptnox cards and exports:</p>
+<p>Main cryptographic operations module. See <a class="reference internal" href="#module-cryptnox_sdk_py.cryptos.main" title="cryptnox_sdk_py.cryptos.main"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cryptnox_sdk_py.cryptos.main</span></code></a> for details.</p>
+<p>Python 2 specific cryptographic utilities. See <a class="reference internal" href="#module-cryptnox_sdk_py.cryptos.py2specials" title="cryptnox_sdk_py.cryptos.py2specials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cryptnox_sdk_py.cryptos.py2specials</span></code></a> for details.</p>
+<p>Python 3 specific cryptographic utilities. See <a class="reference internal" href="#module-cryptnox_sdk_py.cryptos.py3specials" title="cryptnox_sdk_py.cryptos.py3specials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cryptnox_sdk_py.cryptos.py3specials</span></code></a> for details.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">py3specials.</span></span><span class="sig-name descname"><span class="pre">encode_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formt</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Encode a public key in the specified format. See <a class="reference internal" href="#cryptnox_sdk_py.cryptos.main.encode_pubkey" title="cryptnox_sdk_py.cryptos.main.encode_pubkey"><code class="xref py py-func docutils literal notranslate"><span class="pre">cryptnox_sdk_py.cryptos.main.encode_pubkey()</span></code></a> for details.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cryptnox_sdk_py.card.html" class="btn btn-neutral float-left" title="cryptnox_sdk_py.card package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

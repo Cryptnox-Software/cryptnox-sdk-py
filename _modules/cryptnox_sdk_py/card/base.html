@@ -1,0 +1,1127 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cryptnox_sdk_py.card.base &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cryptnox_sdk_py
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cryptnox_sdk_py.card.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cryptnox_sdk_py.card.base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for keeping information about the card attached to the reader</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">secrets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">NamedTuple</span><span class="p">,</span>
+    <span class="n">Tuple</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives.asymmetric</span><span class="w"> </span><span class="kn">import</span> <span class="n">ec</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">authenticity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.custom_bits</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomBitsBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.user_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserDataBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..binary_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">binary_to_list</span><span class="p">,</span> <span class="n">pad_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..crypto_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">aes_encrypt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..enums</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthType</span><span class="p">,</span>
+    <span class="n">Derivation</span><span class="p">,</span>
+    <span class="n">KeyType</span><span class="p">,</span>
+    <span class="n">Origin</span><span class="p">,</span>
+    <span class="n">SeedSource</span><span class="p">,</span>
+    <span class="n">SlotIndex</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InitializationException</span>
+
+<span class="n">User</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">])</span>
+<span class="n">SignatureCheckResult</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;SignatureCheckResult&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="s2">&quot;signature&quot;</span><span class="p">])</span>
+
+<span class="n">BASIC_PAIRING_SECRET</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;Cryptnox Basic CommonPairingData&#39;</span>
+
+
+<div class="viewcode-block" id="Base">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Object that contains information about the card that is in the reader.</span>
+
+<span class="sd">    :param Connection connection: Connection to use for card initialization</span>
+<span class="sd">    :param bool debug: Show debug information to the user.</span>
+
+<span class="sd">    :var List[int] applet_version: Version of the applet on the card.</span>
+<span class="sd">    :var int serial_number: Serial number of card.</span>
+<span class="sd">    :var str session_public_key: Public key of the session.</span>
+<span class="sd">    :var bool initialized: The card has been initialized with secrets.</span>
+
+<span class="sd">    :raises CardTypeException: The card in the reader is not a Cryptnox card</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_ALGORITHM</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">SECP256R1</span>
+    <span class="n">PUK_LENGTH</span> <span class="o">=</span> <span class="mi">15</span>
+
+    <span class="n">pin_rule</span> <span class="o">=</span> <span class="s2">&quot;4-9 digits&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="s2">&quot;Basic&quot;</span>
+
+    <span class="n">user_data</span> <span class="o">=</span> <span class="n">UserDataBase</span><span class="p">()</span>
+    <span class="n">custom_bits</span> <span class="o">=</span> <span class="n">CustomBitsBase</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Base.__init__">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">serial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">applet_version</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                 <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">pairing_secret</span> <span class="o">=</span> <span class="n">BASIC_PAIRING_SECRET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALGORITHM</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">applet_version</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">applet_version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">serial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span><span class="p">:</span> <span class="n">AuthType</span> <span class="o">=</span> <span class="n">AuthType</span><span class="o">.</span><span class="n">NO_AUTH</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span><span class="p">:</span> <span class="n">Origin</span> <span class="o">=</span> <span class="n">Origin</span><span class="o">.</span><span class="n">UNKNOWN</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_apdu</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Value to add to select command to select the applet on the card</span>
+<span class="sd">        :rtype: List[int]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">puk_rule</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Human readable PUK code rule</span>
+
+<span class="sd">        :return: Human readable PUK code rule</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: The connection to the card is established and the card hasn&#39;t been changed</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">certificate</span> <span class="o">=</span> <span class="n">authenticity</span><span class="o">.</span><span class="n">manufacturer_certificate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">exceptions</span><span class="o">.</span><span class="n">CardException</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionException</span><span class="p">,</span>
+                <span class="n">exceptions</span><span class="o">.</span><span class="n">ReaderException</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">certificate_parts</span> <span class="o">=</span> <span class="n">certificate</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;0302010202&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">certificate_parts</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;8&quot;</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;9&quot;</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">certificate_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span>
+
+<div class="viewcode-block" id="Base.change_pairing_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.change_pairing_key">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_pairing_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pairing_key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the pairing key of the card</span>
+
+<span class="sd">        :param int index: Index of the pairing key</span>
+<span class="sd">        :param bytes pairing_key: Pairing key to set for the card</span>
+<span class="sd">        :param str puk: PUK code of the card</span>
+
+<span class="sd">        :raises DataValidationException: input data is not valid</span>
+<span class="sd">        :raises SecureChannelException: operation not allowed</span>
+<span class="sd">        :raises PukException: PUK code is not valid</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.change_pin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.change_pin">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the current pin code of the card to a new pin code.</span>
+
+<span class="sd">        The method will set the given pin code as the pin code of the card.</span>
+<span class="sd">        For it to work the card first must be opened with the current pin code.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param str new_pin: The desired PIN code to be set for the card</span>
+<span class="sd">                            (4-9 digits).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">new_pin</span><span class="p">,</span> <span class="n">pin_name</span><span class="o">=</span><span class="s2">&quot;new pin&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_secret</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">new_pin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+<div class="viewcode-block" id="Base.change_puk">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.change_puk">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_puk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the current pin code of the card to a new pin code.</span>
+
+<span class="sd">        The method will set the given pin code as the pin code of the card.</span>
+<span class="sd">        For it to work the card first must be opened with the current pin code.</span>
+
+<span class="sd">        :param str current_puk: The current PUK code of the card</span>
+<span class="sd">        :param str new_puk: The desired PUK code to be set for the card</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">current_puk</span><span class="p">,</span> <span class="s2">&quot;current puk&quot;</span><span class="p">)</span>
+        <span class="n">new_puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">new_puk</span><span class="p">,</span> <span class="s2">&quot;new puk&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_secret</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">new_puk</span> <span class="o">+</span> <span class="n">current_puk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+<div class="viewcode-block" id="Base.check_init">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.check_init">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the initialization has been done on the card.</span>
+
+<span class="sd">        It can be useful to check if the card is initialized before doing</span>
+<span class="sd">        anything else, like asking for pin code from the user.</span>
+
+<span class="sd">        :raises InitializationException: The card is not initialized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.derive">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.derive">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">derive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Derive key on path and make it the current key in the card</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+<span class="sd">            - Seed must exist</span>
+
+<span class="sd">        :param KeyType key_type: Key type to do derive on</span>
+<span class="sd">        :param str path: Path on which to do derivation</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.dual_seed_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.dual_seed_public_key">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dual_seed_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the public key from the card for dual initialization of the cards</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param str pin: PIN code of card if it was opened with a PIN check</span>
+
+<span class="sd">        :return: Public key and signature that can be sent into the other card</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises DataException: The received data is invalid</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.dual_seed_load">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.dual_seed_load">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dual_seed_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load public key and signature from the other card into the card to generate same seed.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param str pin: PIN code of card if it was opened with a PIN check</span>
+<span class="sd">        :param bytes data: Public key and signature of public key from the other card</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extended_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Extended public key turned on</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.generate_random_number">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.generate_random_number">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_random_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate random number on the car and return it.</span>
+
+<span class="sd">        :param int size: Output data size in bytes (between 16 and 64, mod 4)</span>
+
+<span class="sd">        :return: Random number generated by the chip</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises DataValidationException: size in not a number between 16 and 64 or is not</span>
+<span class="sd">                                         divisible by 4</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.generate_seed">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.generate_seed">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a seed directly on the card.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param pin: PIN code of the card. Can be empty if card is opened with</span>
+<span class="sd">                    challenge-response validation</span>
+<span class="sd">        :type pin: str, optional</span>
+
+<span class="sd">        :return: Primary node &quot;m&quot; UID (hash of public key)</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises KeyGenerationException: There was an issue with generating the key</span>
+<span class="sd">        :raises KeyAlreadyGenerated: The card already has a seed generated</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.get_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.get_public_key">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="n">Derivation</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                       <span class="n">compressed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the public key from the card.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated, except for PIN-less path</span>
+<span class="sd">            - Seed must exist</span>
+
+<span class="sd">        :param Derivation derivation: Derivation to use.</span>
+<span class="sd">        :param KeyType key_type: Key type to use</span>
+<span class="sd">        :param str path:</span>
+<span class="sd">        :param bool compressed: The returned value is in compressed format.</span>
+
+<span class="sd">        :return: The public key for the given path in hexadecimal string format</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        :raises DerivationSelectionException: Card is not initialized with seed</span>
+<span class="sd">        :raises ReadPublicKeyException: Invalid data received from card</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.get_public_key_extended">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.get_public_key_extended">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key_extended</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the extended public key (xpub) from the card.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+<span class="sd">            - Seed must exist</span>
+<span class="sd">            - XPUB capability must be enabled (or PUK provided to enable it)</span>
+
+<span class="sd">        :param KeyType key_type: Key type to use (default: KeyType.K1)</span>
+<span class="sd">        :param str puk: Optional PUK code to enable XPUB capability</span>
+<span class="sd">        :return: Extended public key in hexadecimal string format</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        :raises exceptions.SeedException: If no seed exists on the card</span>
+<span class="sd">        :raises exceptions.ReadPublicKeyException: If invalid data received from card</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.get_public_key_clear">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.get_public_key_clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_public_key_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">compressed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the public key within clear channel</span>
+
+<span class="sd">        :param derivation: Derivation + KeyType (e.g., Derivation.CURRENT_KEY + KeyType.K1)</span>
+<span class="sd">        :param path: Optional BIP path string like &quot;m/44&#39;/0&#39;/0&#39;&quot;</span>
+<span class="sd">        :param compressed: Whether to return compressed format</span>
+<span class="sd">        :return: Public key in bytes format</span>
+<span class="sd">        :raises exceptions.ReadPublicKeyException: If bad data received</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.set_pubexport">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_pubexport">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pubexport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set pubexport capability (xpub or clear pubkey)</span>
+
+<span class="sd">        :param status: True to enable, False to disable</span>
+<span class="sd">        :param p1: 0 for xpub, 1 for clear pubkey</span>
+<span class="sd">        :param puk: PUK code</span>
+<span class="sd">        :raises exceptions.DataValidationException: If p1 is invalid</span>
+<span class="sd">        :raises exceptions.PukException: If PUK is incorrect</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.set_xpubread">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_xpubread">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_xpubread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set extended public key read capability</span>
+
+<span class="sd">        :param status: True to enable, False to disable</span>
+<span class="sd">        :param puk: PUK code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.set_clearpubkey">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_clearpubkey">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_clearpubkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set clear public key read capability</span>
+
+<span class="sd">        :param status: True to enable, False to disable</span>
+<span class="sd">        :param puk: PUK code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.decrypt">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.decrypt">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">encrypted_data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Decrypt data using ECIES (Elliptic Curve Integrated Encryption Scheme).</span>
+
+<span class="sd">        Generates a symmetric secret for simplified ECIES using an EC key in the BIP32 tree.</span>
+<span class="sd">        This command is inspired by DECipher in OpenPGP smartcards. This allows asymmetric</span>
+<span class="sd">        encryption using a key in the card seed tree. Anyone can encrypt with a public key</span>
+<span class="sd">        from the card, and only the (private) key in the card can decrypt.</span>
+
+<span class="sd">        During the seed loading, the card saves in a dedicated key slot the result of a</span>
+<span class="sd">        fixed derivation path. The child EC key used for this command is fixed (relative</span>
+<span class="sd">        to a given seed). The path is computed with SLIP17 for the URI &quot;openpgp://cryptnox&quot;</span>
+<span class="sd">        with index=0, and equals: m/17&#39;/910196630&#39;/2006168372&#39;/332516148&#39;/580566270&#39;</span>
+
+<span class="sd">        The symmetric key is computed as SHA2(ECDH): SHA2-256(k.PubKey), where k is the</span>
+<span class="sd">        private ECP256r1 key, the &quot;decrypt&quot; key slot.</span>
+
+<span class="sd">        :param int p1: 0x00 = Output symmetric key, 0x01 = Decrypt data in card</span>
+<span class="sd">        :param bytes pubkey: Third party public key in X9.62 uncompressed format (0x04|X|Y, 65 bytes)</span>
+<span class="sd">        :param bytes encrypted_data: Encrypted data (required when p1=1, must be 16-byte aligned)</span>
+<span class="sd">        :param str pin: PIN code (required if no user key auth, right-padded with 0x00)</span>
+<span class="sd">        :return: Symmetric key (p1=0) or decrypted data (p1=1)</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises exceptions.SeedException: If no seed/key loaded</span>
+<span class="sd">        :raises exceptions.PinException: If PIN is incorrect</span>
+<span class="sd">        :raises exceptions.DataValidationException: If data length is incorrect</span>
+<span class="sd">        :raises exceptions.GenericException: If other errors occur</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Base.history">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NamedTuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get history of hashes the card has signed regardless of any</span>
+<span class="sd">        parameters given to sign</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param int index: Index of entry in history</span>
+
+<span class="sd">        :return: Return entry containing signing_counter, representing index of sign call, and</span>
+<span class="sd">                 hashed_data, the data that was signed</span>
+<span class="sd">        :rtype: NamedTuple</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get relevant information about the card.</span>
+
+<span class="sd">        :return: Dictionary containing information for the card</span>
+<span class="sd">        :rtype: Dict[str, Any]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">,</span>
+            <span class="s2">&quot;serial_number&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span><span class="p">,</span>
+            <span class="s2">&quot;applet_version&quot;</span><span class="p">:</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">applet_version</span><span class="p">)),</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+            <span class="s2">&quot;initialized&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">,</span>
+            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_key</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Base.init">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.init">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+             <span class="n">pairing_secret</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">BASIC_PAIRING_SECRET</span><span class="p">,</span> <span class="n">nfc_sign</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the Cryptnox card.</span>
+
+<span class="sd">        Initialize the Cryptnox card with the owners name and email address.</span>
+<span class="sd">        Set the PIN and PUK codes for authenticating with the card to be able</span>
+<span class="sd">        to use it.</span>
+
+<span class="sd">        :param str name: Name of the card owner</span>
+<span class="sd">        :param str email: Email of the card owner</span>
+<span class="sd">        :param str pin: PIN code that will be used to open the card</span>
+<span class="sd">        :param str puk: PUK code that will be used to open the card</span>
+<span class="sd">        :param bytes pairing_secret: Pairing secret to use with the card</span>
+<span class="sd">        :param bool nfc_sign: Signature command can be used over NFC, only available on certain type</span>
+
+<span class="sd">        :return: Pairing secret</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises InitializationException: There was an issue with initialization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+        <span class="n">pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Name must be less than 20 characters&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="s2">&quot;Name must be less than 60 characters&quot;</span><span class="p">)</span>
+        <span class="n">pairing_secret</span> <span class="o">=</span> <span class="n">pairing_secret</span> <span class="ow">or</span> <span class="n">BASIC_PAIRING_SECRET</span>
+
+        <span class="n">session_private_key</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">generate_private_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ALGORITHM</span><span class="p">())</span>
+
+        <span class="n">session_public_key</span> <span class="o">=</span> <span class="n">session_private_key</span><span class="o">.</span><span class="n">public_key</span><span class="p">()</span><span class="o">.</span><span class="n">public_bytes</span><span class="p">(</span>
+            <span class="n">serialization</span><span class="o">.</span><span class="n">Encoding</span><span class="o">.</span><span class="n">X962</span><span class="p">,</span>
+            <span class="n">serialization</span><span class="o">.</span><span class="n">PublicFormat</span><span class="o">.</span><span class="n">UncompressedPoint</span><span class="p">)</span>
+
+        <span class="n">send_public_key</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">session_public_key</span><span class="p">))</span> <span class="o">+</span>
+                                        <span class="n">session_public_key</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
+
+        <span class="n">public_key</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">EllipticCurvePublicKey</span><span class="o">.</span><span class="n">from_encoded_point</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ALGORITHM</span><span class="p">(),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">session_public_key</span><span class="p">))</span>
+        <span class="n">aes_init_key</span> <span class="o">=</span> <span class="n">session_private_key</span><span class="o">.</span><span class="n">exchange</span><span class="p">(</span><span class="n">ec</span><span class="o">.</span><span class="n">ECDH</span><span class="p">(),</span> <span class="n">public_key</span><span class="p">)</span>
+
+        <span class="n">iv_init_key</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">token_bytes</span><span class="p">(</span><span class="n">nbytes</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">puk</span><span class="p">,</span> <span class="n">pairing_secret</span><span class="p">,</span> <span class="n">nfc_sign</span><span class="p">)</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">pad_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">encrypted_payload</span> <span class="o">=</span> <span class="n">aes_encrypt</span><span class="p">(</span><span class="n">aes_init_key</span><span class="p">,</span> <span class="n">iv_init_key</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+        <span class="n">data_init</span> <span class="o">=</span> <span class="n">send_public_key</span> <span class="o">+</span> <span class="n">iv_init_key</span> <span class="o">+</span> <span class="n">encrypted_payload</span>
+        <span class="n">apdu_init</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xFE</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mi">82</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">encrypted_payload</span><span class="p">)]</span>
+        <span class="n">apdu_init</span> <span class="o">+=</span> <span class="n">binary_to_list</span><span class="p">(</span><span class="n">data_init</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">code1</span><span class="p">,</span> <span class="n">code2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">apdu_init</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">code1</span> <span class="o">!=</span> <span class="mh">0x90</span> <span class="ow">or</span> <span class="n">code2</span> <span class="o">!=</span> <span class="mh">0x00</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">pairing_secret</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Whether the card is initialized</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.load_seed">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.load_seed">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the given seed into the Cryptnox card.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param bytes seed: Seed to initialize the card with</span>
+<span class="sd">        :param pin: PIN code of the card. Can be empty if card is opened with</span>
+<span class="sd">                    challenge-response validation</span>
+<span class="sd">        :type pin: str, optional</span>
+
+<span class="sd">        :raises KeyGenerationException: Data is not correct</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the user has authenticated.</span>
+
+<span class="sd">        :return: Whether the user has authenticated using the PIN code or</span>
+<span class="sd">                 challenge-response validation</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">!=</span> <span class="n">AuthType</span><span class="o">.</span><span class="n">NO_AUTH</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Origin</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the card origin.</span>
+
+<span class="sd">        :return: Return if the card is original Cryptnox card, fake or there&#39;s an</span>
+<span class="sd">                 issue getting the information</span>
+<span class="sd">        :rtype: Origin</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">==</span> <span class="n">Origin</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">=</span> <span class="n">authenticity</span><span class="o">.</span><span class="n">origin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pin_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Whether the PIN code can be used for authentication</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pinless_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Return whether the card has a pinless path</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.reset">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.reset">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset the card and return it to factory settings.</span>
+
+<span class="sd">        :param puk: PUK code associated with the card</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">seed_source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SeedSource</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: How the seed was generated</span>
+<span class="sd">        :rtype: SeedSource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.set_pin_authentication">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_pin_authentication">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pin_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn on/off authentication with the PIN code. Other methods can still be used.</span>
+
+<span class="sd">        :param bool status: Status of PIN authentication</span>
+<span class="sd">        :param str puk: PUK code associated with the card</span>
+
+<span class="sd">        :raises DataValidationException: input data is not valid</span>
+<span class="sd">        :raises PukException: PUK code is not valid</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.set_pinless_path">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_pinless_path">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pinless_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enable working with the card without a PIN on path.</span>
+
+<span class="sd">        :param str path: Path to be available without a PIN code</span>
+<span class="sd">        :param str puk: PUK code of the card</span>
+
+<span class="sd">        :raises DataValidationException: input data is not valid</span>
+<span class="sd">        :raises PukException: PUK code is not valid</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.set_extended_public_key">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.set_extended_public_key">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_extended_public_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn on/off extended public key output.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - Seed must be loaded</span>
+
+<span class="sd">        :param bool status: Status of PIN authentication</span>
+<span class="sd">        :param str puk: PUK code associated with the card</span>
+
+<span class="sd">        :raises DataValidationException: input data is not valid</span>
+<span class="sd">        :raises PukException: PUK code is not valid</span>
+<span class="sd">        :raises KeyException: Seed not found</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.sign">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.sign">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">derivation</span><span class="p">:</span> <span class="n">Derivation</span><span class="p">,</span> <span class="n">key_type</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">KeyType</span><span class="o">.</span><span class="n">K1</span><span class="p">,</span>
+             <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_eos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sign the message using given derivation.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code provided, authenticate with user key by signing same message</span>
+<span class="sd">              or PIN-less path used</span>
+<span class="sd">            - Seed must be loaded</span>
+
+<span class="sd">        :param bytes data: Data to sign</span>
+<span class="sd">        :param Derivation derivation: Derivation to use.</span>
+<span class="sd">        :param key_type: Key type to use. Defaults to K1</span>
+<span class="sd">        :type key_type: KeyType, optional</span>
+<span class="sd">        :param path: Path of the key. If empty use main key</span>
+<span class="sd">        :type path: str, optional</span>
+<span class="sd">        :param pin: PIN code of the card</span>
+<span class="sd">        :type pin: str, optional</span>
+<span class="sd">        :param bool filter_eos: Filter signature so it is valid for EOS network,</span>
+<span class="sd">                                might take longer. Defaults to False</span>
+<span class="sd">        :type filter_eos: str, optional</span>
+
+<span class="sd">        :return: The signature generated by the card in DER common format.</span>
+<span class="sd">        :rtype: bytes</span>
+
+<span class="sd">        :raises DataException: Invalid data received during signature</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.signature_check">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.signature_check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">signature_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignatureCheckResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sign random 32 bytes for validation that private key of public key is on the card.</span>
+
+<span class="sd">        This call doesn&#39;t increase signature counter and doesn&#39;t go into signature history.</span>
+
+<span class="sd">        :param bytes nonce: random 16 bytes that will be used to sign</span>
+
+<span class="sd">        :return: Message that was signed and the signature</span>
+<span class="sd">        :rtype: SignatureCheckResult</span>
+
+<span class="sd">        :raises DataValidationException: Nonce has to be 16 bytes</span>
+<span class="sd">        :raises SeedException: There is no seed on the card</span>
+<span class="sd">        :raises DataException: Data returned from the card is not valid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">signing_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Counter of how many times the card has been used to sign</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.unblock_pin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.unblock_pin">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unblock_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verifies the user using the PUK code and sets a new PIN code on the card.</span>
+
+<span class="sd">        Method should be used when the user has forgotten this/hers PIN code.</span>
+<span class="sd">        By entering the PUK code the user verifies his/hers identity and can</span>
+<span class="sd">        set the new PIN code on the card.</span>
+<span class="sd">        Can be used only if the card is locked.</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - User PIN must be locked</span>
+<span class="sd">            - PIN code authentication must be enabled</span>
+
+<span class="sd">        :param str puk: PUK code for verification of the user, before changing</span>
+<span class="sd">                        the PIN code.</span>
+<span class="sd">        :param str new_pin: The desired PIN code to be set for the card (4-9 digits).</span>
+
+<span class="sd">        :raises PukException: PUK code not valid</span>
+<span class="sd">        :raises CardNotBlocked: Card is not blocked, operation can&#39;t be done</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin_authentication</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span><span class="p">(</span><span class="s2">&quot;PIN authentication is disabled. Can not unblock it.&quot;</span><span class="p">)</span>
+
+        <span class="n">apdu</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+        <span class="n">puk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">)</span>
+        <span class="n">new_pin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_pin</span><span class="p">(</span><span class="n">new_pin</span><span class="p">,</span> <span class="n">pin_name</span><span class="o">=</span><span class="s2">&quot;new pin&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">apdu</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">puk</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">new_pin</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PukException</span><span class="p">(</span><span class="n">number_of_retries</span><span class="o">=</span><span class="n">error</span><span class="o">.</span><span class="n">number_of_retries</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">exceptions</span><span class="o">.</span><span class="n">SecureChannelException</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinAuthenticationException</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">CardNotBlocked</span><span class="p">(</span><span class="s2">&quot;Card is not blocked or pin disabled&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span> <span class="o">=</span> <span class="n">AuthType</span><span class="o">.</span><span class="n">PIN</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_add">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_add">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">data_info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">public_key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">puk_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="n">cred_id</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add user public key into the card for user authentication</span>
+
+<span class="sd">        :param int slot: Slot to write the public key to</span>
+<span class="sd">                         1 - EC256R1</span>
+<span class="sd">                         2 - RSA key, 2048 bits, public exponent must be 65537</span>
+<span class="sd">                         3 - FIDO key</span>
+<span class="sd">        :param bytes data_info: 64 bytes of user data</span>
+<span class="sd">        :param bytes public_key: Public key of the secure element to be used for authentication</span>
+<span class="sd">        :param str puk_code: PUK code of the card</span>
+<span class="sd">        :param cred_id: Cred id. Used for FIDO2 authentication</span>
+<span class="sd">        :type cred_id: bytes, optional</span>
+
+<span class="sd">        :raises DataValidationException: Invalid input data</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_delete">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_delete">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">puk_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete the user key from slot and free up for insertion</span>
+
+<span class="sd">        :param SlotIndex slot: Slot to remove the key from</span>
+<span class="sd">        :param str puk_code: PUK code of the card</span>
+
+<span class="sd">        :raises DataValidationException: Invalid input data</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_info">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_info">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the description and public key of the user key</span>
+
+<span class="sd">        :requires:</span>
+<span class="sd">            - PIN code or challenge-response validated</span>
+
+<span class="sd">        :param SlotIndex slot: Index of slot for which to fetch the description</span>
+
+<span class="sd">        :return: Description and public key in slot</span>
+<span class="sd">        :rtype: tuple[str, str]</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_enabled">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_enabled">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot_index</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if user key is present in given slot</span>
+
+<span class="sd">        :param SlotIndex slot_index: Slot index to check for</span>
+
+<span class="sd">        :return: Whether the user key for slot is present</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_challenge_response_nonce">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_challenge_response_nonce">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_challenge_response_nonce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get 32 bytes random value from the card that is used to open the card with a user key</span>
+
+<span class="sd">        Take nonce value from the card. Sign it with a third party application, like TPM.</span>
+<span class="sd">        Send the signature back into the card using</span>
+<span class="sd">        :func:`~cryptnox_sdk_py.card.base.Base.user_key_challenge_response_open`</span>
+
+<span class="sd">        :return: 32 bytes random value used as nonce</span>
+<span class="sd">        :rtype: bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_challenge_response_open">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_challenge_response_open">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_challenge_response_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send the nonce signature to the card to open it for operations, like it was opened by a</span>
+<span class="sd">        PIN code</span>
+
+<span class="sd">        :param SlotIndex slot: Slot to use to open the card</span>
+<span class="sd">        :param bytes signature: Signature generated by a third party like TPM.</span>
+
+<span class="sd">        :return: Whether the challenge response authentication succeeded</span>
+<span class="sd">        :rtype: bool</span>
+
+<span class="sd">        :raises DataValidationException: invalid input data</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.user_key_signature_open">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.user_key_signature_open">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_key_signature_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="n">SlotIndex</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for opening the card to sign the given message</span>
+
+<span class="sd">        :param SlotIndex slot: Slot to use to open the card</span>
+<span class="sd">        :param bytes message: Message that will be sent to sign operation</span>
+<span class="sd">        :param bytes signature: Signature generated by a third party, like TPM, on the same message</span>
+
+<span class="sd">        :return: Whether the challenge response authentication succeeded</span>
+<span class="sd">        :rtype: bool</span>
+
+<span class="sd">        :raises DataValidationException: invalid input data</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">valid_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the card has a valid key</span>
+
+<span class="sd">        :return: Whether the card has a valid key.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Base.valid_pin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.valid_pin">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">valid_pin</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pin_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pin&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if provided pin is valid</span>
+
+<span class="sd">        :param str pin: The pin to check if valid</span>
+<span class="sd">        :param str pin_name: Value used in DataValidationException for pin name</span>
+<span class="sd">        :return str: Provided pin in str format if valid</span>
+
+<span class="sd">        :raise DataValidationException: Provided pin is not valid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">4</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">pin_name</span><span class="si">}</span><span class="s2"> must have between&quot;</span>
+                                                     <span class="sa">f</span><span class="s2">&quot; 4 and 9 numeric characters&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pin</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">pin_name</span><span class="si">}</span><span class="s2"> must be numeric.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pin</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\0</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pin</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Base.valid_puk">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.valid_puk">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">valid_puk</span><span class="p">(</span><span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;puk&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if provided puk is valid</span>
+
+<span class="sd">        :param str puk: The puk to check if valid (accepts all ASCII characters)</span>
+<span class="sd">        :param puk_name: Value used in DataValidationException for puk name. Defaults to: puk</span>
+<span class="sd">        :type puk_name: str, optional</span>
+
+<span class="sd">        :return str: Provided puk in str format if valid</span>
+
+<span class="sd">        :raise DataValidationException: Provided puk is not valid (wrong length or non-ASCII characters)</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.verify_pin">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.card.html#cryptnox_sdk_py.card.base.Base.verify_pin">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verify_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check PIN code and open the card for operations that are protected.</span>
+
+<span class="sd">        The method is sending the PIN code to the card to open it for other</span>
+<span class="sd">        operations. If there is an issue an exception will be raised.</span>
+
+
+<span class="sd">        :param str pin: PIN code to check against the card.</span>
+
+<span class="sd">        :raises PinException: Invalid PIN code</span>
+<span class="sd">        :raises DataValidationException: Invalid length or PIN code authentication disabled</span>
+<span class="sd">        :raises SoftLock: The card has been locked and needs power cycling before</span>
+<span class="sd">                          it can be used again</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_change_secret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select_pin_puk</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change secret, PIN or PUK code, of the card</span>
+
+<span class="sd">        :param int select_pin_puk: Change the PIN or PUK code:</span>
+<span class="sd">                                   0 - PIN</span>
+<span class="sd">                                   1 - PUK</span>
+<span class="sd">        :param str value: Value of the new secret</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x21</span><span class="p">,</span> <span class="n">select_pin_puk</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InitializationException</span><span class="p">(</span><span class="s2">&quot;Card is not initialized&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send_encrypted</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_coded_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="n">value_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">value_bytes</span><span class="p">)])</span> <span class="o">+</span> <span class="n">value_bytes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">puk</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="n">pairing_secret</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">BASIC_PAIRING_SECRET</span><span class="p">,</span> <span class="n">nfc_sign</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Base</span><span class="o">.</span><span class="n">_get_coded_value</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="n">Base</span><span class="o">.</span><span class="n">_get_coded_value</span><span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">puk</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">pairing_secret</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the available information about the owner of the card from the card</span>
+
+<span class="sd">        When the card is initialized the owner name and email address are stored</span>
+<span class="sd">        on the card. This method will read and return them.</span>
+
+<span class="sd">        :return: A dictionary containing the owner name and email address</span>
+<span class="sd">        :rtype: Dict[str, str]</span>
+
+<span class="sd">        :raises CryptnoxCard.PinException: PIN code wasn&#39;t validated.</span>
+<span class="sd">        :raises CryptnoxCard.SecureChannelException: Secure channel not opened.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__subclasshook__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Base</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">attrs</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="s1">&quot;serial&quot;: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span><span class="si">}</span><span class="s1">, &quot;version&quot;: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">applet_version</span><span class="si">}</span><span class="se">}}</span><span class="s1">&#39;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
