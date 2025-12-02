@@ -47,7 +47,25 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cryptnox SDK Python Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-hardware">Supported Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-pypi">From PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-source">From source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-usage-examples">Quick Usage Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connect-to-a-cryptnox-card">1. Connect to a Cryptnox Card</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-pin-code">2. Test PIN code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-a-new-seed">3. Generate a new seed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
@@ -78,6 +96,164 @@
              
   <section id="cryptnox-sdk-python-overview">
 <h1>Cryptnox SDK Python Overview<a class="headerlink" href="#cryptnox-sdk-python-overview" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">cryptnox_sdk_py</span></code> is a Python 3 library used to communicate with the <strong>Cryptnox Smartcard Applet</strong>.
+It provides a high-level API to manage Cryptnox Hardware Wallet Cards, including initialization,
+secure channel setup, seed management, and cryptographic signing.</p>
+<section id="supported-hardware">
+<h2>Supported Hardware<a class="headerlink" href="#supported-hardware" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Cryptnox smart cards</strong> 💳</p></li>
+<li><p><strong>Standard PC/SC smart card readers</strong>: either USB NFC reader or a USB smart card reader</p></li>
+</ul>
+<p>Get your cards and readers here: <a class="reference external" href="https://shop.cryptnox.com">shop.cryptnox.com</a></p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Establish communication with Cryptnox smart cards</p></li>
+<li><p>Initialize and manage card lifecycle</p></li>
+<li><p>Secure channel authentication and pairing</p></li>
+<li><p>Seed generation and restoration (BIP32 / BIP39 compatibility)</p></li>
+<li><p>ECDSA secp256k1 signing for blockchain applications</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<section id="from-pypi">
+<h3>From PyPI<a class="headerlink" href="#from-pypi" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cryptnox_sdk_py
+</pre></div>
+</div>
+</section>
+<section id="from-source">
+<h3>From source<a class="headerlink" href="#from-source" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/cryptnox/cryptnox-sdk-py.git
+<span class="nb">cd</span><span class="w"> </span>cryptnox-sdk-py
+pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.11 – 3.13.7</p></li>
+<li><p>PC/SC Smart Card service (<code class="docutils literal notranslate"><span class="pre">pcscd</span></code>) on Linux</p></li>
+</ul>
+<p>On Linux, ensure the PC/SC service is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>pcscd
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pcscd
+</pre></div>
+</div>
+</section>
+</section>
+<section id="quick-usage-examples">
+<h2>Quick Usage Examples<a class="headerlink" href="#quick-usage-examples" title="Link to this heading"></a></h2>
+<section id="connect-to-a-cryptnox-card">
+<h3>1. Connect to a Cryptnox Card<a class="headerlink" href="#connect-to-a-cryptnox-card" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">card</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">get_card</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+    <span class="c1"># Card is loaded and can be used</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Card serial number: </span><span class="si">{</span><span class="n">card</span><span class="o">.</span><span class="n">serial_number</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ReaderException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reader not found at index&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">CryptnoxException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="c1"># Issue loading the card</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="c1"># Always close the connection when done</span>
+    <span class="k">if</span> <span class="n">connection</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="test-pin-code">
+<h3>2. Test PIN code<a class="headerlink" href="#test-pin-code" title="Link to this heading"></a></h3>
+<p>In the PIN verification example below the card must be initialized before calling verify_pin.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Connect to the Cryptnox card first</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Connect to card at index 0</span>
+    <span class="n">card</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">get_card</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+    <span class="c1"># Once connected, verify the PIN</span>
+    <span class="n">pin_to_test</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>  <span class="c1"># Example PIN</span>
+    <span class="n">card</span><span class="o">.</span><span class="n">verify_pin</span><span class="p">(</span><span class="n">pin_to_test</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PIN verified successfully. Card is ready for operations.&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ReaderException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reader not found at index&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">CryptnoxException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading card: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">PinException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid PIN code.&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">DataValidationException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid PIN length or PIN authentication disabled.&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">SoftLock</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Card is locked. Please power cycle the card.&quot;</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="c1"># Always close the connection when done</span>
+    <span class="k">if</span> <span class="n">connection</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-a-new-seed">
+<h3>3. Generate a new seed<a class="headerlink" href="#generate-a-new-seed" title="Link to this heading"></a></h3>
+<p>In the example below the card must be initialized before generating a seed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">binascii</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cryptnox_sdk_py</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+
+<span class="n">PIN</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>  <span class="c1"># or &quot;&quot; if the card was opened via challenge-response</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">card</span> <span class="o">=</span> <span class="n">cryptnox_sdk_py</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">get_card</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+        <span class="n">seed_uid</span> <span class="o">=</span> <span class="n">card</span><span class="o">.</span><span class="n">generate_seed</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+        <span class="c1"># seed_uid is of type bytes: display in hex for readability</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Seed (primary node m) UID:&quot;</span><span class="p">,</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">seed_uid</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ReaderException</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reader not found at index&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">CryptnoxException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading card: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">KeyAlreadyGenerated</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A seed is already generated on this card.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">KeyGenerationException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate seed: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Always close the connection when done</span>
+        <span class="k">if</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
+<p>📚 Full API reference: <a class="reference external" href="https://cryptnox.github.io/cryptnox-sdk-py/">https://cryptnox.github.io/cryptnox-sdk-py/</a></p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>cryptnox-sdk-py is dual-licensed:</p>
+<ul class="simple">
+<li><p><strong>LGPL-3.0</strong> for open-source projects and proprietary projects that comply with LGPL requirements</p></li>
+<li><p><strong>Commercial license</strong> for projects that require a proprietary license without LGPL obligations (see COMMERCIAL.md for details)</p></li>
+</ul>
+<p>For commercial inquiries, contact: <a class="reference external" href="mailto:contact&#37;&#52;&#48;cryptnox&#46;com">contact<span>&#64;</span>cryptnox<span>&#46;</span>com</a></p>
+</section>
 </section>
 
 
