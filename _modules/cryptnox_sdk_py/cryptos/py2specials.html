@@ -191,7 +191,7 @@
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="c1"># Python 3 implementation</span>
+
     <span class="n">int_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
     <span class="n">string_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,)</span>
 
@@ -201,7 +201,7 @@
         <span class="mi">16</span><span class="p">:</span> <span class="s1">&#39;0123456789abcdef&#39;</span><span class="p">,</span>
         <span class="mi">32</span><span class="p">:</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz234567&#39;</span><span class="p">,</span>
         <span class="mi">58</span><span class="p">:</span> <span class="s1">&#39;123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz&#39;</span><span class="p">,</span>
-        <span class="mi">256</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>  <span class="c1"># Use bytes for base 256</span>
+        <span class="mi">256</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
     <span class="p">}</span>
 
 <div class="viewcode-block" id="bin_dbl_sha256">
@@ -243,14 +243,14 @@
         <span class="n">base</span><span class="p">,</span> <span class="n">minlen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">base</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">minlen</span><span class="p">)</span>
         <span class="n">code_string</span> <span class="o">=</span> <span class="n">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
 
-        <span class="c1"># Check if we are working with bytes (base 256)</span>
+
         <span class="n">is_bytes</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code_string</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">is_bytes</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">while</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">digit</span> <span class="o">=</span> <span class="n">code_string</span><span class="p">[</span><span class="n">val</span> <span class="o">%</span> <span class="n">base</span><span class="p">]</span>
 
-            <span class="c1"># In Py3, iterating/indexing bytes gives int. Convert back to single byte if needed.</span>
+
             <span class="k">if</span> <span class="n">is_bytes</span><span class="p">:</span>
                 <span class="n">digit_char</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">digit</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
@@ -280,7 +280,7 @@
         <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-        <span class="c1"># Optimizations for common bases</span>
+
         <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">256</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="s1">&#39;big&#39;</span><span class="p">)</span>
 
