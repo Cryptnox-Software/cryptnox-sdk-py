@@ -243,13 +243,11 @@
         <span class="n">base</span><span class="p">,</span> <span class="n">minlen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">base</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">minlen</span><span class="p">)</span>
         <span class="n">code_string</span> <span class="o">=</span> <span class="n">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
 
-
         <span class="n">is_bytes</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code_string</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">is_bytes</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">while</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">digit</span> <span class="o">=</span> <span class="n">code_string</span><span class="p">[</span><span class="n">val</span> <span class="o">%</span> <span class="n">base</span><span class="p">]</span>
-
 
             <span class="k">if</span> <span class="n">is_bytes</span><span class="p">:</span>
                 <span class="n">digit_char</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">digit</span><span class="p">])</span>
@@ -279,7 +277,6 @@
 
         <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
 
         <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">256</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="s1">&#39;big&#39;</span><span class="p">)</span>
