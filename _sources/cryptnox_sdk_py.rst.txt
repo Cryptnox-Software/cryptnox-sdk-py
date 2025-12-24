@@ -138,6 +138,6 @@ The ``cryptnox_sdk_py`` package is a library for communicating with Cryptnox car
 
 .. py:data:: __version__
    :type: str
-   :value: "1.0.2"
+   :value: "1.0.3"
 
    Current version of the cryptnox_sdk_py library.

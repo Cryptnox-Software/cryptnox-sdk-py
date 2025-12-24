@@ -156,7 +156,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Manufacturer certificate read from the card</p>
+<dd class="field-even"><p>Manufacturer certificate read from the card in hexadecimal format</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -1237,6 +1237,23 @@ it can be used again</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.card.base.Base.get_manufacturer_certificate">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/base.html#Base.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.base.Base.get_manufacturer_certificate" title="Link to this definition"></a></dt>
+<dd><p>Get the manufacturer certificate from the card.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexed</strong> (<em>bool</em>) – Return the certificate in hexadecimal string format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Manufacturer certificate in hexadecimal string or bytes format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1423,8 +1440,20 @@ challenge-response validation</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cryptnox_sdk_py.card.basic_g1.BasicG1.get_manufacturer_certificate">
-<span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/basic_g1.html#BasicG1.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.basic_g1.BasicG1.get_manufacturer_certificate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/basic_g1.html#BasicG1.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.basic_g1.BasicG1.get_manufacturer_certificate" title="Link to this definition"></a></dt>
+<dd><p>Get the manufacturer certificate from the card.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexed</strong> (<em>bool</em>) – Return the certificate in hexadecimal string format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Manufacturer certificate in hexadecimal string or bytes format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cryptnox_sdk_py.card.basic_g1.BasicG1.get_public_key">
@@ -2743,6 +2772,23 @@ challenge-response validation</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cryptnox_sdk_py.card.Base.get_manufacturer_certificate">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/base.html#Base.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.Base.get_manufacturer_certificate" title="Link to this definition"></a></dt>
+<dd><p>Get the manufacturer certificate from the card.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexed</strong> (<em>bool</em>) – Return the certificate in hexadecimal string format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Manufacturer certificate in hexadecimal string or bytes format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cryptnox_sdk_py.card.Base.get_public_key">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_public_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">derivation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox_sdk_py.enums.Derivation" title="cryptnox_sdk_py.enums.Derivation"><span class="pre">Derivation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cryptnox_sdk_py.html#cryptnox_sdk_py.enums.KeyType" title="cryptnox_sdk_py.enums.KeyType"><span class="pre">KeyType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">KeyType.K1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/base.html#Base.get_public_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.Base.get_public_key" title="Link to this definition"></a></dt>
 <dd><p>Get the public key from the card.</p>
@@ -3720,8 +3766,20 @@ challenge-response validation</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cryptnox_sdk_py.card.BasicG1.get_manufacturer_certificate">
-<span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/basic_g1.html#BasicG1.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.BasicG1.get_manufacturer_certificate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_manufacturer_certificate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cryptnox_sdk_py/card/basic_g1.html#BasicG1.get_manufacturer_certificate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cryptnox_sdk_py.card.BasicG1.get_manufacturer_certificate" title="Link to this definition"></a></dt>
+<dd><p>Get the manufacturer certificate from the card.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexed</strong> (<em>bool</em>) – Return the certificate in hexadecimal string format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Manufacturer certificate in hexadecimal string or bytes format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cryptnox_sdk_py.card.BasicG1.get_public_key">

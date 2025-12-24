@@ -78,6 +78,22 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
 <section id="id1">
 <h2>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="version-1-0-3-2025-12-24">
+<h3>Version 1.0.3 - 2025-12-24<a class="headerlink" href="#version-1-0-3-2025-12-24" title="Link to this heading"></a></h3>
+<section id="added">
+<h4>Added<a class="headerlink" href="#added" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">get_manufacturer_certificate()</span></code> method to Base card class with <code class="docutils literal notranslate"><span class="pre">hexed</span></code> parameter for flexible certificate retrieval</p></li>
+</ul>
+</section>
+<section id="changed">
+<h4>Changed<a class="headerlink" href="#changed" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">get_manufacturer_certificate()</span></code> in BasicG1 with multi-page APDU support for full certificate retrieval</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">manufacturer_certificate()</span></code> function in authenticity module to use the new card-specific method</p></li>
+</ul>
+</section>
+</section>
 <section id="version-1-0-2-2025-12-08">
 <h3>Version 1.0.2 - 2025-12-08<a class="headerlink" href="#version-1-0-2-2025-12-08" title="Link to this heading"></a></h3>
 <section id="changes">
@@ -87,8 +103,8 @@
 <li><p>Improved Python 3 compatibility in cryptographic utilities</p></li>
 </ul>
 </section>
-<section id="added">
-<h4>Added<a class="headerlink" href="#added" title="Link to this heading"></a></h4>
+<section id="id2">
+<h4>Added<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Implemented Python code quality scanning CI/CD pipeline using flake8</p></li>
 <li><p>Implemented security vulnerability scanning CI/CD pipeline using OSV-Scanner</p></li>
@@ -109,8 +125,8 @@
 </section>
 <section id="version-1-0-1-2025-11-18">
 <h3>Version 1.0.1 - 2025-11-18<a class="headerlink" href="#version-1-0-1-2025-11-18" title="Link to this heading"></a></h3>
-<section id="id2">
-<h4>Changes<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<section id="id3">
+<h4>Changes<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Package renamed from <code class="docutils literal notranslate"><span class="pre">cryptnoxpy</span></code> to <code class="docutils literal notranslate"><span class="pre">cryptnox_sdk_py</span></code>
 - All imports must be updated from <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">cryptnoxpy</span></code> to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">cryptnox_sdk_py</span></code>
@@ -121,8 +137,8 @@
 <li><p>Modified setup configuration (setup.cfg) for better package management</p></li>
 </ul>
 </section>
-<section id="id3">
-<h4>Added<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<section id="id4">
+<h4>Added<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Added flake8 code quality checks to CI/CD workflow</p></li>
 <li><p>Added Sphinx documentation framework</p></li>
@@ -130,8 +146,8 @@
 <li><p>Added comprehensive exception handling improvements</p></li>
 </ul>
 </section>
-<section id="id4">
-<h4>Fixed<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<section id="id5">
+<h4>Fixed<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Fixed card not recognized error</p></li>
 <li><p>Resolved PUK retries persistence issue</p></li>

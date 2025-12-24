@@ -90,7 +90,6 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">hmac</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">builtins</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">ripemd</span>
 
 <span class="c1"># Elliptic curve parameters (secp256k1)</span>
@@ -176,10 +175,13 @@
 
 
 
+<span class="n">_sum</span> <span class="o">=</span> <span class="nb">sum</span>
+
+
 <div class="viewcode-block" id="sum">
 <a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.sum">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">builtins</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_sum</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
 
 
 
