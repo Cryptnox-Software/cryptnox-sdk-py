@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Diagrams &mdash; cryptnox_sdk_py 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9462431b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/custom.js?v=b6ee92be"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="cryptnox_sdk_py.cryptos package" href="cryptnox_sdk_py.cryptos.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #101f2e" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cryptnox_sdk_py
+              <img src="_static/cryptnox-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Cryptnox SDK Python Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class Diagrams</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#card-class-hierarchy">Card Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-card-module">Complete Card Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exception-hierarchy">Exception Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enum-classes">Enum Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connection-components">Connection Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-architecture-diagram">Custom Architecture Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-flow-diagram">Data Flow Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#card-initialization-sequence">Card Initialization Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reader-class-hierarchy">Reader Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes-on-diagram-generation">Notes on Diagram Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-developers">For Developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #101f2e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cryptnox_sdk_py</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Class Diagrams</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/class_diagrams.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="class-diagrams">
+<h1>Class Diagrams<a class="headerlink" href="#class-diagrams" title="Link to this heading"></a></h1>
+<p><strong>Automatically generated visual documentation of the Cryptnox SDK architecture</strong></p>
+<p>This section provides automatically generated class diagrams for the Cryptnox SDK Python package.
+These diagrams are generated directly from the source code and update automatically when the code changes.</p>
+<p>📊 <strong>What you’ll find here:</strong></p>
+<ul class="simple">
+<li><p><strong>Class Hierarchies</strong> - Inheritance relationships between card, exception, and enum classes</p></li>
+<li><p><strong>System Architecture</strong> - High-level component interactions and data flows</p></li>
+<li><p><strong>Connection Patterns</strong> - Reader and connection class structures</p></li>
+<li><p><strong>Process Flows</strong> - Card initialization and operation sequences</p></li>
+</ul>
+<p>All diagrams are interactive SVG graphics that update automatically with code changes.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The Cryptnox SDK follows an object-oriented design with a clear class hierarchy. The diagrams below
+illustrate the relationships between classes, inheritance structures, and key components.</p>
+</section>
+<section id="card-class-hierarchy">
+<h2>Card Class Hierarchy<a class="headerlink" href="#card-class-hierarchy" title="Link to this heading"></a></h2>
+<p>The main card classes follow an inheritance pattern with a base abstract class and specific implementations.</p>
+</section>
+<section id="complete-card-module">
+<h2>Complete Card Module<a class="headerlink" href="#complete-card-module" title="Link to this heading"></a></h2>
+<p>Complete class hierarchy for all card-related classes:</p>
+</section>
+<section id="exception-hierarchy">
+<h2>Exception Hierarchy<a class="headerlink" href="#exception-hierarchy" title="Link to this heading"></a></h2>
+<p>The SDK defines a custom exception hierarchy for different error scenarios:</p>
+<figure class="align-default" id="id1">
+<div class="graphviz"><object data="_images/graphviz-1d2c09a4aa662b5cce5206c2c6e871730c89f905.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph exceptions {
+   rankdir=LR;
+   size=&quot;16.0, 10.0&quot;;
+   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue, fontsize=11];
+   edge [arrowsize=0.8];
+
+   CryptnoxException [fillcolor=lightcoral, fontsize=12];
+
+   CryptnoxException -&gt; CardException;
+   CryptnoxException -&gt; CardNotBlocked;
+   CryptnoxException -&gt; CardTypeException;
+   CryptnoxException -&gt; CertificateException;
+   CryptnoxException -&gt; ConnectionException;
+   CryptnoxException -&gt; DataException;
+   CryptnoxException -&gt; DataValidationException;
+   CryptnoxException -&gt; DerivationSelectionException;
+   CryptnoxException -&gt; EOSKeyError;
+   CryptnoxException -&gt; FirmwareException;
+   CryptnoxException -&gt; GenericException;
+   CryptnoxException -&gt; GenuineCheckException;
+   CryptnoxException -&gt; InitializationException;
+   CryptnoxException -&gt; KeyAlreadyGenerated;
+   CryptnoxException -&gt; KeyGenerationException;
+   CryptnoxException -&gt; KeySelectionException;
+   CryptnoxException -&gt; PinAuthenticationException;
+   CryptnoxException -&gt; PinException;
+   CryptnoxException -&gt; PukException;
+   CryptnoxException -&gt; ReadPublicKeyException;
+   CryptnoxException -&gt; ReaderException;
+   CryptnoxException -&gt; SecureChannelException;
+   CryptnoxException -&gt; SeedException;
+   CryptnoxException -&gt; SoftLock;
+   CryptnoxException -&gt; CardClosedException;
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Exception class hierarchy (expanded view)</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="enum-classes">
+<h2>Enum Classes<a class="headerlink" href="#enum-classes" title="Link to this heading"></a></h2>
+<p>The SDK uses several enumerations for type safety:</p>
+</section>
+<section id="connection-components">
+<h2>Connection Components<a class="headerlink" href="#connection-components" title="Link to this heading"></a></h2>
+<p>Classes related to card connection and communication:</p>
+</section>
+<section id="custom-architecture-diagram">
+<h2>Custom Architecture Diagram<a class="headerlink" href="#custom-architecture-diagram" title="Link to this heading"></a></h2>
+<p>The following diagram shows the high-level architecture of the SDK:</p>
+<figure class="align-default" id="id2">
+<div class="graphviz"><object data="_images/graphviz-122b08fd0f42dea59cee6a433d369bc22df4133c.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph cryptnox_architecture {
+   rankdir=LR;
+   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+
+   // Main components
+   User [label=&quot;User Application&quot;, fillcolor=lightgreen];
+   Factory [label=&quot;Factory\n(get_card)&quot;];
+   Reader [label=&quot;Reader&quot;];
+   Connection [label=&quot;Connection&quot;];
+   Card [label=&quot;Card Classes\n(Base, BasicG1, Nft)&quot;, fillcolor=lightyellow];
+
+   // Utilities
+   CryptoUtils [label=&quot;Crypto Utils&quot;, fillcolor=lightgray];
+   BinaryUtils [label=&quot;Binary Utils&quot;, fillcolor=lightgray];
+
+   // External
+   SmartCard [label=&quot;Smart Card\nHardware&quot;, fillcolor=orange];
+
+   // Relationships
+   User -&gt; Factory [label=&quot;creates&quot;];
+   Factory -&gt; Reader [label=&quot;uses&quot;];
+   Reader -&gt; Connection [label=&quot;creates&quot;];
+   Factory -&gt; Card [label=&quot;instantiates&quot;];
+   Card -&gt; Connection [label=&quot;uses&quot;];
+   Connection -&gt; SmartCard [label=&quot;communicates&quot;];
+   Card -&gt; CryptoUtils [label=&quot;uses&quot;];
+   Card -&gt; BinaryUtils [label=&quot;uses&quot;];
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Cryptnox SDK Architecture</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="data-flow-diagram">
+<h2>Data Flow Diagram<a class="headerlink" href="#data-flow-diagram" title="Link to this heading"></a></h2>
+<p>The following diagram illustrates the data flow during card operations:</p>
+<figure class="align-default" id="id3">
+<div class="graphviz"><object data="_images/graphviz-e9abd19e3cbb26257dcebb6cfc1eab7c4c79d064.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph card_operation_flow {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+
+   Start [label=&quot;Application Request&quot;, shape=ellipse, fillcolor=lightgreen];
+   Card [label=&quot;Card Object&quot;];
+   Connection [label=&quot;Connection Layer&quot;];
+   APDU [label=&quot;APDU Command&quot;, fillcolor=lightyellow];
+   SmartCard [label=&quot;Smart Card&quot;, fillcolor=orange];
+   Response [label=&quot;Card Response&quot;, fillcolor=lightyellow];
+   Process [label=&quot;Process Response&quot;];
+   Result [label=&quot;Return Result&quot;, shape=ellipse, fillcolor=lightgreen];
+
+   Start -&gt; Card [label=&quot;method call&quot;];
+   Card -&gt; Connection [label=&quot;send request&quot;];
+   Connection -&gt; APDU [label=&quot;format&quot;];
+   APDU -&gt; SmartCard [label=&quot;transmit&quot;];
+   SmartCard -&gt; Response [label=&quot;receive&quot;];
+   Response -&gt; Connection [label=&quot;parse&quot;];
+   Connection -&gt; Card [label=&quot;return data&quot;];
+   Card -&gt; Process [label=&quot;validate&quot;];
+   Process -&gt; Result;
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Card Operation Data Flow</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="card-initialization-sequence">
+<h2>Card Initialization Sequence<a class="headerlink" href="#card-initialization-sequence" title="Link to this heading"></a></h2>
+<figure class="align-default" id="id4">
+<div class="graphviz"><object data="_images/graphviz-c85e4f5faec827e09cc2480c4050f40602589d98.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph card_init {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+
+   GetCard [label=&quot;get_card()&quot;, shape=ellipse];
+   Detect [label=&quot;Detect Card Type&quot;];
+   Select [label=&quot;Select Applet&quot;];
+   Serial [label=&quot;Get Serial Number&quot;];
+   SessionKey [label=&quot;Get Session Key&quot;];
+   Instantiate [label=&quot;Instantiate Card Class&quot;];
+   Ready [label=&quot;Card Ready&quot;, shape=ellipse, fillcolor=lightgreen];
+
+   GetCard -&gt; Detect;
+   Detect -&gt; Select;
+   Select -&gt; Serial;
+   Serial -&gt; SessionKey;
+   SessionKey -&gt; Instantiate;
+   Instantiate -&gt; Ready;
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Card Initialization Process</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="reader-class-hierarchy">
+<h2>Reader Class Hierarchy<a class="headerlink" href="#reader-class-hierarchy" title="Link to this heading"></a></h2>
+<p>The SDK supports different types of card readers:</p>
+</section>
+<section id="notes-on-diagram-generation">
+<h2>Notes on Diagram Generation<a class="headerlink" href="#notes-on-diagram-generation" title="Link to this heading"></a></h2>
+<p><strong>Automatic Updates</strong>: All diagrams on this page are generated automatically from the Python source code
+during the Sphinx build process. When you modify the code structure, simply rebuild the documentation to
+see updated diagrams.</p>
+<p><strong>Technologies Used</strong>:</p>
+<ul class="simple">
+<li><p><strong>Sphinx</strong>: Documentation generator</p></li>
+<li><p><strong>sphinx.ext.inheritance_diagram</strong>: For class hierarchy diagrams</p></li>
+<li><p><strong>sphinx.ext.graphviz</strong>: For custom architecture and flow diagrams</p></li>
+<li><p><strong>Graphviz</strong>: Graph visualization software</p></li>
+</ul>
+<p><strong>Build Requirements</strong>: Make sure Graphviz is installed on your system and available in your PATH.
+See the documentation guides for detailed setup instructions.</p>
+</section>
+<section id="for-developers">
+<h2>For Developers<a class="headerlink" href="#for-developers" title="Link to this heading"></a></h2>
+<p>If you’re a developer working on this project and need to regenerate or customize diagrams, please refer to:</p>
+<ul class="simple">
+<li><p><strong>Developer Guide</strong>: <cite>docs/DEVELOPER_GUIDE_DIAGRAMS.md</cite> - Complete documentation guide</p></li>
+</ul>
+<p><strong>Quick rebuild command</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
+sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cryptnox_sdk_py.cryptos.html" class="btn btn-neutral float-left" title="cryptnox_sdk_py.cryptos package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Cryptnox.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

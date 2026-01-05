@@ -1,7 +1,7 @@
 Cryptnox SDK Python Documentation
 ==================================
 
-Bienvenue dans la documentation technique de Cryptnox SDK Python.
+Welcome to the Cryptnox SDK Python technical documentation.
 
 .. toctree::
    :maxdepth: 2
@@ -9,4 +9,5 @@ Bienvenue dans la documentation technique de Cryptnox SDK Python.
 
    overview
    modules
+   class_diagrams
    license
