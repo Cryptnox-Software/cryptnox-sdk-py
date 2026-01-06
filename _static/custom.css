@@ -87,3 +87,27 @@ th {
     background: #fcb770 !important;
 }
 
+/* Center all graphviz and inheritance diagrams */
+.graphviz,
+div.graphviz,
+figure.align-default {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.graphviz object,
+.graphviz svg {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Center inheritance diagrams */
+.inheritance {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+

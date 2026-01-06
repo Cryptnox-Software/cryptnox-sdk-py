@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9462431b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ca7149ea" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
@@ -117,81 +117,195 @@ illustrate the relationships between classes, inheritance structures, and key co
 <section id="complete-card-module">
 <h2>Complete Card Module<a class="headerlink" href="#complete-card-module" title="Link to this heading"></a></h2>
 <p>Complete class hierarchy for all card-related classes:</p>
+<figure class="align-default" id="id1">
+<div class="graphviz"><object data="_images/graphviz-18470349299b1728f8a63430428182d9eb5f30f8.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph card_module {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   edge [arrowsize=0.7, color=black];
+
+   // Base abstract class
+   Base [label=&quot;&lt;&lt;abstract&gt;&gt;\nBase\n─────────────────\n+ serial_number\n+ applet_version\n+ connection\n─────────────────\n+ verify_pin()\n+ sign()\n+ derive()\n+ get_public_key()\n...&quot;];
+
+   // Concrete card implementations
+   BasicG1 [label=&quot;BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\n+ generate_seed()\n+ load_seed()\n+ dual_seed_**()&quot;];
+
+   Nft [label=&quot;Nft\n─────────────────\nNFT Card\n─────────────────\n+ slot operations\n+ RSA operations&quot;];
+
+   // Support classes
+   UserData [label=&quot;UserData\n─────────────────\n+ read()\n+ write()&quot;, fontsize=9];
+
+   CustomBits [label=&quot;CustomBits\n─────────────────\n+ read()\n+ write()&quot;, fontsize=9];
+
+   Authenticity [label=&quot;authenticity\n(module)\n─────────────────\n+ genuine_check()&quot;, fontsize=9];
+
+   // Inheritance
+   Base -&gt; BasicG1;
+   Base -&gt; Nft;
+
+   // Composition relationships
+   Base -&gt; UserData [style=dashed, arrowhead=diamond, label=&quot;has&quot;];
+   Base -&gt; CustomBits [style=dashed, arrowhead=diamond, label=&quot;has&quot;];
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Complete card module class hierarchy</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="exception-hierarchy">
 <h2>Exception Hierarchy<a class="headerlink" href="#exception-hierarchy" title="Link to this heading"></a></h2>
 <p>The SDK defines a custom exception hierarchy for different error scenarios:</p>
-<figure class="align-default" id="id1">
-<div class="graphviz"><object data="_images/graphviz-1d2c09a4aa662b5cce5206c2c6e871730c89f905.svg" type="image/svg+xml" class="graphviz">
+<figure class="align-default" id="id2">
+<div class="graphviz"><object data="_images/graphviz-45ae09618d109999bd58975ea077c161684d8918.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph exceptions {
-   rankdir=LR;
-   size=&quot;16.0, 10.0&quot;;
-   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue, fontsize=11];
-   edge [arrowsize=0.8];
+   rankdir=TB;
+   splines=ortho;
+   nodesep=0.4;
+   ranksep=0.6;
+   node [shape=box, style=&quot;rounded&quot;, fontsize=10, width=1.8, color=black, fontcolor=black];
+   edge [arrowsize=0.7, color=black];
 
-   CryptnoxException [fillcolor=lightcoral, fontsize=12];
+   // Base exception
+   CryptnoxException [fontsize=11, label=&quot;CryptnoxException\n(Base)&quot;];
 
-   CryptnoxException -&gt; CardException;
-   CryptnoxException -&gt; CardNotBlocked;
-   CryptnoxException -&gt; CardTypeException;
-   CryptnoxException -&gt; CertificateException;
-   CryptnoxException -&gt; ConnectionException;
-   CryptnoxException -&gt; DataException;
-   CryptnoxException -&gt; DataValidationException;
-   CryptnoxException -&gt; DerivationSelectionException;
-   CryptnoxException -&gt; EOSKeyError;
-   CryptnoxException -&gt; FirmwareException;
-   CryptnoxException -&gt; GenericException;
-   CryptnoxException -&gt; GenuineCheckException;
-   CryptnoxException -&gt; InitializationException;
-   CryptnoxException -&gt; KeyAlreadyGenerated;
-   CryptnoxException -&gt; KeyGenerationException;
-   CryptnoxException -&gt; KeySelectionException;
-   CryptnoxException -&gt; PinAuthenticationException;
-   CryptnoxException -&gt; PinException;
-   CryptnoxException -&gt; PukException;
-   CryptnoxException -&gt; ReadPublicKeyException;
-   CryptnoxException -&gt; ReaderException;
-   CryptnoxException -&gt; SecureChannelException;
-   CryptnoxException -&gt; SeedException;
-   CryptnoxException -&gt; SoftLock;
-   CryptnoxException -&gt; CardClosedException;
+   // Row 1 - Card related
+   subgraph cluster_row1 {
+      style=invis;
+      CardException; CardClosedException; CardNotBlocked; CardTypeException;
+   }
+
+   // Row 2 - Connection and Data
+   subgraph cluster_row2 {
+      style=invis;
+      ConnectionException; DataException; DataValidationException; CertificateException;
+   }
+
+   // Row 3 - Key related
+   subgraph cluster_row3 {
+      style=invis;
+      KeyAlreadyGenerated; KeyGenerationException; KeySelectionException; DerivationSelectionException;
+   }
+
+   // Row 4 - PIN/PUK/Auth
+   subgraph cluster_row4 {
+      style=invis;
+      PinException; PukException; PinAuthenticationException; SecureChannelException;
+   }
+
+   // Row 5 - Other
+   subgraph cluster_row5 {
+      style=invis;
+      FirmwareException; GenericException; GenuineCheckException; InitializationException;
+   }
+
+   // Row 6 - Remaining
+   subgraph cluster_row6 {
+      style=invis;
+      EOSKeyError; ReadPublicKeyException; ReaderException; SeedException; SoftLock;
+   }
+
+   // All edges from base
+   CryptnoxException -&gt; {CardException CardClosedException CardNotBlocked CardTypeException};
+   CryptnoxException -&gt; {ConnectionException DataException DataValidationException CertificateException};
+   CryptnoxException -&gt; {KeyAlreadyGenerated KeyGenerationException KeySelectionException DerivationSelectionException};
+   CryptnoxException -&gt; {PinException PukException PinAuthenticationException SecureChannelException};
+   CryptnoxException -&gt; {FirmwareException GenericException GenuineCheckException InitializationException};
+   CryptnoxException -&gt; {EOSKeyError ReadPublicKeyException ReaderException SeedException SoftLock};
 }</p></object></div>
 <figcaption>
-<p><span class="caption-text">Exception class hierarchy (expanded view)</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+<p><span class="caption-text">Exception class hierarchy (expanded view)</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="enum-classes">
 <h2>Enum Classes<a class="headerlink" href="#enum-classes" title="Link to this heading"></a></h2>
 <p>The SDK uses several enumerations for type safety:</p>
+<figure class="align-default" id="id3">
+<div class="graphviz"><object data="_images/graphviz-0054588aedb691ece492f6b7f4114aa6ef4aa99a.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph enums {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   edge [arrowsize=0.7, color=black];
+
+   // Python base classes
+   Enum [label=&quot;enum.Enum&quot;, fontsize=9];
+   IntEnum [label=&quot;enum.IntEnum&quot;, fontsize=9];
+
+   // SDK Enums inheriting from Enum
+   AuthType [label=&quot;AuthType\n─────────\nNO_AUTH = 0\nPIN = 1\nUSER_KEY = 2&quot;];
+   Origin [label=&quot;Origin\n─────────\nUNKNOWN = 0\nORIGINAL = 1\nFAKE = 2&quot;];
+   SeedSource [label=&quot;SeedSource\n─────────\nNO_SEED\nSINGLE\nEXTENDED\nEXTERNAL\nINTERNAL\nDUAL\nWRAPPED&quot;];
+
+   // SDK Enums inheriting from IntEnum
+   Derivation [label=&quot;Derivation\n─────────\nCURRENT_KEY\nDERIVE\nDERIVE_AND_MAKE_CURRENT\nPINLESS_PATH&quot;];
+   KeyType [label=&quot;KeyType\n─────────\nK1 = 0x00\nR1 = 0x10&quot;];
+   SlotIndex [label=&quot;SlotIndex\n─────────\nEC256R1 = 0x01\nRSA = 0x02\nFIDO = 0x03&quot;];
+
+   // Inheritance relationships
+   Enum -&gt; AuthType;
+   Enum -&gt; Origin;
+   Enum -&gt; SeedSource;
+   IntEnum -&gt; Derivation;
+   IntEnum -&gt; KeyType;
+   IntEnum -&gt; SlotIndex;
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Enumeration classes</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="connection-components">
 <h2>Connection Components<a class="headerlink" href="#connection-components" title="Link to this heading"></a></h2>
 <p>Classes related to card connection and communication:</p>
+<figure class="align-default" id="id4">
+<div class="graphviz"><object data="_images/graphviz-8b6072a5eec8a7d7a3af6ef155d8dbe6bd762da7.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph connection_components {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   edge [arrowsize=0.7, color=black];
+
+   // Python base classes
+   ContextDecorator [label=&quot;contextlib.ContextDecorator&quot;, fontsize=9];
+   ABCMeta [label=&quot;abc.ABCMeta\n(metaclass)&quot;, fontsize=9];
+
+   // Connection class
+   Connection [label=&quot;Connection\n─────────────────\n+ index: int\n+ debug: bool\n+ remote: bool\n+ session_public_key: str\n─────────────────\n+ send_apdu()\n+ send_encrypted()\n+ disconnect()\n+ remote_read()&quot;];
+
+   // Reader abstract class
+   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()&quot;];
+
+   // Inheritance
+   ContextDecorator -&gt; Connection;
+   ABCMeta -&gt; Reader [style=dashed, label=&quot;metaclass&quot;];
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Connection and Reader classes</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="custom-architecture-diagram">
 <h2>Custom Architecture Diagram<a class="headerlink" href="#custom-architecture-diagram" title="Link to this heading"></a></h2>
 <p>The following diagram shows the high-level architecture of the SDK:</p>
-<figure class="align-default" id="id2">
-<div class="graphviz"><object data="_images/graphviz-122b08fd0f42dea59cee6a433d369bc22df4133c.svg" type="image/svg+xml" class="graphviz">
+<figure class="align-default" id="id5">
+<div class="graphviz"><object data="_images/graphviz-2c7f671eb4f65ecd6517072595829518465a7047.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph cryptnox_architecture {
    rankdir=LR;
-   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   edge [color=black];
 
    // Main components
-   User [label=&quot;User Application&quot;, fillcolor=lightgreen];
+   User [label=&quot;User Application&quot;];
    Factory [label=&quot;Factory\n(get_card)&quot;];
    Reader [label=&quot;Reader&quot;];
    Connection [label=&quot;Connection&quot;];
-   Card [label=&quot;Card Classes\n(Base, BasicG1, Nft)&quot;, fillcolor=lightyellow];
+   Card [label=&quot;Card Classes\n(Base, BasicG1, Nft)&quot;];
 
    // Utilities
-   CryptoUtils [label=&quot;Crypto Utils&quot;, fillcolor=lightgray];
-   BinaryUtils [label=&quot;Binary Utils&quot;, fillcolor=lightgray];
+   CryptoUtils [label=&quot;Crypto Utils&quot;];
+   BinaryUtils [label=&quot;Binary Utils&quot;];
 
    // External
-   SmartCard [label=&quot;Smart Card\nHardware&quot;, fillcolor=orange];
+   SmartCard [label=&quot;Smart Card\nHardware&quot;];
 
    // Relationships
    User -&gt; Factory [label=&quot;creates&quot;];
@@ -204,27 +318,28 @@ illustrate the relationships between classes, inheritance structures, and key co
    Card -&gt; BinaryUtils [label=&quot;uses&quot;];
 }</p></object></div>
 <figcaption>
-<p><span class="caption-text">Cryptnox SDK Architecture</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<p><span class="caption-text">Cryptnox SDK Architecture</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="data-flow-diagram">
 <h2>Data Flow Diagram<a class="headerlink" href="#data-flow-diagram" title="Link to this heading"></a></h2>
 <p>The following diagram illustrates the data flow during card operations:</p>
-<figure class="align-default" id="id3">
-<div class="graphviz"><object data="_images/graphviz-e9abd19e3cbb26257dcebb6cfc1eab7c4c79d064.svg" type="image/svg+xml" class="graphviz">
+<figure class="align-default" id="id6">
+<div class="graphviz"><object data="_images/graphviz-cec59ebdf8da04b987bd722935da4c67403734f1.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph card_operation_flow {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   edge [color=black];
 
-   Start [label=&quot;Application Request&quot;, shape=ellipse, fillcolor=lightgreen];
+   Start [label=&quot;Application Request&quot;, shape=ellipse];
    Card [label=&quot;Card Object&quot;];
    Connection [label=&quot;Connection Layer&quot;];
-   APDU [label=&quot;APDU Command&quot;, fillcolor=lightyellow];
-   SmartCard [label=&quot;Smart Card&quot;, fillcolor=orange];
-   Response [label=&quot;Card Response&quot;, fillcolor=lightyellow];
+   APDU [label=&quot;APDU Command&quot;];
+   SmartCard [label=&quot;Smart Card&quot;];
+   Response [label=&quot;Card Response&quot;];
    Process [label=&quot;Process Response&quot;];
-   Result [label=&quot;Return Result&quot;, shape=ellipse, fillcolor=lightgreen];
+   Result [label=&quot;Return Result&quot;, shape=ellipse];
 
    Start -&gt; Card [label=&quot;method call&quot;];
    Card -&gt; Connection [label=&quot;send request&quot;];
@@ -237,17 +352,18 @@ illustrate the relationships between classes, inheritance structures, and key co
    Process -&gt; Result;
 }</p></object></div>
 <figcaption>
-<p><span class="caption-text">Card Operation Data Flow</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+<p><span class="caption-text">Card Operation Data Flow</span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="card-initialization-sequence">
 <h2>Card Initialization Sequence<a class="headerlink" href="#card-initialization-sequence" title="Link to this heading"></a></h2>
-<figure class="align-default" id="id4">
-<div class="graphviz"><object data="_images/graphviz-c85e4f5faec827e09cc2480c4050f40602589d98.svg" type="image/svg+xml" class="graphviz">
+<figure class="align-default" id="id7">
+<div class="graphviz"><object data="_images/graphviz-f55ac1396208d0ed34e0441c44af19fd04f64bbb.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph card_init {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded,filled&quot;, fillcolor=lightblue];
+   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   edge [color=black];
 
    GetCard [label=&quot;get_card()&quot;, shape=ellipse];
    Detect [label=&quot;Detect Card Type&quot;];
@@ -255,7 +371,7 @@ illustrate the relationships between classes, inheritance structures, and key co
    Serial [label=&quot;Get Serial Number&quot;];
    SessionKey [label=&quot;Get Session Key&quot;];
    Instantiate [label=&quot;Instantiate Card Class&quot;];
-   Ready [label=&quot;Card Ready&quot;, shape=ellipse, fillcolor=lightgreen];
+   Ready [label=&quot;Card Ready&quot;, shape=ellipse];
 
    GetCard -&gt; Detect;
    Detect -&gt; Select;
@@ -265,13 +381,50 @@ illustrate the relationships between classes, inheritance structures, and key co
    Instantiate -&gt; Ready;
 }</p></object></div>
 <figcaption>
-<p><span class="caption-text">Card Initialization Process</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+<p><span class="caption-text">Card Initialization Process</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="reader-class-hierarchy">
 <h2>Reader Class Hierarchy<a class="headerlink" href="#reader-class-hierarchy" title="Link to this heading"></a></h2>
 <p>The SDK supports different types of card readers:</p>
+<figure class="align-default" id="id8">
+<div class="graphviz"><object data="_images/graphviz-6209b33292bacdc6381d6df67f36acf399bea3eb.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph reader_hierarchy {
+   rankdir=TB;
+   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   edge [arrowsize=0.7, color=black];
+
+   // Base abstract class
+   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()&quot;];
+
+   // Concrete implementations
+   NfcReader [label=&quot;NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\n+ connect()\n+ send()&quot;];
+   SmartCardReader [label=&quot;SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\n+ connect()\n+ send()&quot;];
+
+   // Reader module exceptions
+   ReaderException [label=&quot;ReaderException&quot;, fontsize=9];
+   CardException [label=&quot;CardException&quot;, fontsize=9];
+   ConnException [label=&quot;ConnectionException&quot;, fontsize=9];
+
+   // Inheritance
+   Reader -&gt; NfcReader;
+   Reader -&gt; SmartCardReader;
+
+   // Group exceptions
+   subgraph cluster_exceptions {
+      label=&quot;Reader Module Exceptions&quot;;
+      style=dashed;
+      fontsize=9;
+      color=black;
+      fontcolor=black;
+      ReaderException; CardException; ConnException;
+   }
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Reader implementations (NfcReader and SmartCard reader)</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="notes-on-diagram-generation">
 <h2>Notes on Diagram Generation<a class="headerlink" href="#notes-on-diagram-generation" title="Link to this heading"></a></h2>

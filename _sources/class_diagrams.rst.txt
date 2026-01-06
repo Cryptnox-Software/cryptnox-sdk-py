@@ -36,9 +36,37 @@ Complete Card Module
 
 Complete class hierarchy for all card-related classes:
 
-.. inheritance-diagram:: cryptnox_sdk_py.card
-   :parts: 1
+.. graphviz::
    :caption: Complete card module class hierarchy
+
+   digraph card_module {
+      rankdir=TB;
+      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      edge [arrowsize=0.7, color=black];
+      
+      // Base abstract class
+      Base [label="<<abstract>>\nBase\n─────────────────\n+ serial_number\n+ applet_version\n+ connection\n─────────────────\n+ verify_pin()\n+ sign()\n+ derive()\n+ get_public_key()\n..."];
+      
+      // Concrete card implementations
+      BasicG1 [label="BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\n+ generate_seed()\n+ load_seed()\n+ dual_seed_**()"];
+      
+      Nft [label="Nft\n─────────────────\nNFT Card\n─────────────────\n+ slot operations\n+ RSA operations"];
+      
+      // Support classes
+      UserData [label="UserData\n─────────────────\n+ read()\n+ write()", fontsize=9];
+      
+      CustomBits [label="CustomBits\n─────────────────\n+ read()\n+ write()", fontsize=9];
+      
+      Authenticity [label="authenticity\n(module)\n─────────────────\n+ genuine_check()", fontsize=9];
+      
+      // Inheritance
+      Base -> BasicG1;
+      Base -> Nft;
+      
+      // Composition relationships
+      Base -> UserData [style=dashed, arrowhead=diamond, label="has"];
+      Base -> CustomBits [style=dashed, arrowhead=diamond, label="has"];
+   }
 
 Exception Hierarchy
 -------------------
@@ -49,38 +77,59 @@ The SDK defines a custom exception hierarchy for different error scenarios:
    :caption: Exception class hierarchy (expanded view)
 
    digraph exceptions {
-      rankdir=LR;
-      size="16.0, 10.0";
-      node [shape=box, style="rounded,filled", fillcolor=lightblue, fontsize=11];
-      edge [arrowsize=0.8];
+      rankdir=TB;
+      splines=ortho;
+      nodesep=0.4;
+      ranksep=0.6;
+      node [shape=box, style="rounded", fontsize=10, width=1.8, color=black, fontcolor=black];
+      edge [arrowsize=0.7, color=black];
       
-      CryptnoxException [fillcolor=lightcoral, fontsize=12];
+      // Base exception
+      CryptnoxException [fontsize=11, label="CryptnoxException\n(Base)"];
       
-      CryptnoxException -> CardException;
-      CryptnoxException -> CardNotBlocked;
-      CryptnoxException -> CardTypeException;
-      CryptnoxException -> CertificateException;
-      CryptnoxException -> ConnectionException;
-      CryptnoxException -> DataException;
-      CryptnoxException -> DataValidationException;
-      CryptnoxException -> DerivationSelectionException;
-      CryptnoxException -> EOSKeyError;
-      CryptnoxException -> FirmwareException;
-      CryptnoxException -> GenericException;
-      CryptnoxException -> GenuineCheckException;
-      CryptnoxException -> InitializationException;
-      CryptnoxException -> KeyAlreadyGenerated;
-      CryptnoxException -> KeyGenerationException;
-      CryptnoxException -> KeySelectionException;
-      CryptnoxException -> PinAuthenticationException;
-      CryptnoxException -> PinException;
-      CryptnoxException -> PukException;
-      CryptnoxException -> ReadPublicKeyException;
-      CryptnoxException -> ReaderException;
-      CryptnoxException -> SecureChannelException;
-      CryptnoxException -> SeedException;
-      CryptnoxException -> SoftLock;
-      CryptnoxException -> CardClosedException;
+      // Row 1 - Card related
+      subgraph cluster_row1 {
+         style=invis;
+         CardException; CardClosedException; CardNotBlocked; CardTypeException;
+      }
+      
+      // Row 2 - Connection and Data
+      subgraph cluster_row2 {
+         style=invis;
+         ConnectionException; DataException; DataValidationException; CertificateException;
+      }
+      
+      // Row 3 - Key related
+      subgraph cluster_row3 {
+         style=invis;
+         KeyAlreadyGenerated; KeyGenerationException; KeySelectionException; DerivationSelectionException;
+      }
+      
+      // Row 4 - PIN/PUK/Auth
+      subgraph cluster_row4 {
+         style=invis;
+         PinException; PukException; PinAuthenticationException; SecureChannelException;
+      }
+      
+      // Row 5 - Other
+      subgraph cluster_row5 {
+         style=invis;
+         FirmwareException; GenericException; GenuineCheckException; InitializationException;
+      }
+      
+      // Row 6 - Remaining
+      subgraph cluster_row6 {
+         style=invis;
+         EOSKeyError; ReadPublicKeyException; ReaderException; SeedException; SoftLock;
+      }
+      
+      // All edges from base
+      CryptnoxException -> {CardException CardClosedException CardNotBlocked CardTypeException};
+      CryptnoxException -> {ConnectionException DataException DataValidationException CertificateException};
+      CryptnoxException -> {KeyAlreadyGenerated KeyGenerationException KeySelectionException DerivationSelectionException};
+      CryptnoxException -> {PinException PukException PinAuthenticationException SecureChannelException};
+      CryptnoxException -> {FirmwareException GenericException GenuineCheckException InitializationException};
+      CryptnoxException -> {EOSKeyError ReadPublicKeyException ReaderException SeedException SoftLock};
    }
 
 Enum Classes
@@ -88,18 +137,64 @@ Enum Classes
 
 The SDK uses several enumerations for type safety:
 
-.. inheritance-diagram:: cryptnox_sdk_py.enums
-   :parts: 1
+.. graphviz::
    :caption: Enumeration classes
+
+   digraph enums {
+      rankdir=TB;
+      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      edge [arrowsize=0.7, color=black];
+      
+      // Python base classes
+      Enum [label="enum.Enum", fontsize=9];
+      IntEnum [label="enum.IntEnum", fontsize=9];
+      
+      // SDK Enums inheriting from Enum
+      AuthType [label="AuthType\n─────────\nNO_AUTH = 0\nPIN = 1\nUSER_KEY = 2"];
+      Origin [label="Origin\n─────────\nUNKNOWN = 0\nORIGINAL = 1\nFAKE = 2"];
+      SeedSource [label="SeedSource\n─────────\nNO_SEED\nSINGLE\nEXTENDED\nEXTERNAL\nINTERNAL\nDUAL\nWRAPPED"];
+      
+      // SDK Enums inheriting from IntEnum
+      Derivation [label="Derivation\n─────────\nCURRENT_KEY\nDERIVE\nDERIVE_AND_MAKE_CURRENT\nPINLESS_PATH"];
+      KeyType [label="KeyType\n─────────\nK1 = 0x00\nR1 = 0x10"];
+      SlotIndex [label="SlotIndex\n─────────\nEC256R1 = 0x01\nRSA = 0x02\nFIDO = 0x03"];
+      
+      // Inheritance relationships
+      Enum -> AuthType;
+      Enum -> Origin;
+      Enum -> SeedSource;
+      IntEnum -> Derivation;
+      IntEnum -> KeyType;
+      IntEnum -> SlotIndex;
+   }
 
 Connection Components
 ---------------------
 
 Classes related to card connection and communication:
 
-.. inheritance-diagram:: cryptnox_sdk_py.connection.Connection cryptnox_sdk_py.reader.Reader
-   :parts: 1
+.. graphviz::
    :caption: Connection and Reader classes
+
+   digraph connection_components {
+      rankdir=TB;
+      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      edge [arrowsize=0.7, color=black];
+      
+      // Python base classes
+      ContextDecorator [label="contextlib.ContextDecorator", fontsize=9];
+      ABCMeta [label="abc.ABCMeta\n(metaclass)", fontsize=9];
+      
+      // Connection class
+      Connection [label="Connection\n─────────────────\n+ index: int\n+ debug: bool\n+ remote: bool\n+ session_public_key: str\n─────────────────\n+ send_apdu()\n+ send_encrypted()\n+ disconnect()\n+ remote_read()"];
+      
+      // Reader abstract class
+      Reader [label="<<abstract>>\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()"];
+      
+      // Inheritance
+      ContextDecorator -> Connection;
+      ABCMeta -> Reader [style=dashed, label="metaclass"];
+   }
 
 Custom Architecture Diagram
 ----------------------------
@@ -111,21 +206,22 @@ The following diagram shows the high-level architecture of the SDK:
 
    digraph cryptnox_architecture {
       rankdir=LR;
-      node [shape=box, style="rounded,filled", fillcolor=lightblue];
+      node [shape=box, style="rounded", color=black, fontcolor=black];
+      edge [color=black];
       
       // Main components
-      User [label="User Application", fillcolor=lightgreen];
+      User [label="User Application"];
       Factory [label="Factory\n(get_card)"];
       Reader [label="Reader"];
       Connection [label="Connection"];
-      Card [label="Card Classes\n(Base, BasicG1, Nft)", fillcolor=lightyellow];
+      Card [label="Card Classes\n(Base, BasicG1, Nft)"];
       
       // Utilities
-      CryptoUtils [label="Crypto Utils", fillcolor=lightgray];
-      BinaryUtils [label="Binary Utils", fillcolor=lightgray];
+      CryptoUtils [label="Crypto Utils"];
+      BinaryUtils [label="Binary Utils"];
       
       // External
-      SmartCard [label="Smart Card\nHardware", fillcolor=orange];
+      SmartCard [label="Smart Card\nHardware"];
       
       // Relationships
       User -> Factory [label="creates"];
@@ -148,16 +244,17 @@ The following diagram illustrates the data flow during card operations:
 
    digraph card_operation_flow {
       rankdir=TB;
-      node [shape=box, style="rounded,filled", fillcolor=lightblue];
+      node [shape=box, style="rounded", color=black, fontcolor=black];
+      edge [color=black];
       
-      Start [label="Application Request", shape=ellipse, fillcolor=lightgreen];
+      Start [label="Application Request", shape=ellipse];
       Card [label="Card Object"];
       Connection [label="Connection Layer"];
-      APDU [label="APDU Command", fillcolor=lightyellow];
-      SmartCard [label="Smart Card", fillcolor=orange];
-      Response [label="Card Response", fillcolor=lightyellow];
+      APDU [label="APDU Command"];
+      SmartCard [label="Smart Card"];
+      Response [label="Card Response"];
       Process [label="Process Response"];
-      Result [label="Return Result", shape=ellipse, fillcolor=lightgreen];
+      Result [label="Return Result", shape=ellipse];
       
       Start -> Card [label="method call"];
       Card -> Connection [label="send request"];
@@ -178,7 +275,8 @@ Card Initialization Sequence
 
    digraph card_init {
       rankdir=TB;
-      node [shape=box, style="rounded,filled", fillcolor=lightblue];
+      node [shape=box, style="rounded", color=black, fontcolor=black];
+      edge [color=black];
       
       GetCard [label="get_card()", shape=ellipse];
       Detect [label="Detect Card Type"];
@@ -186,7 +284,7 @@ Card Initialization Sequence
       Serial [label="Get Serial Number"];
       SessionKey [label="Get Session Key"];
       Instantiate [label="Instantiate Card Class"];
-      Ready [label="Card Ready", shape=ellipse, fillcolor=lightgreen];
+      Ready [label="Card Ready", shape=ellipse];
       
       GetCard -> Detect;
       Detect -> Select;
@@ -201,9 +299,40 @@ Reader Class Hierarchy
 
 The SDK supports different types of card readers:
 
-.. inheritance-diagram:: cryptnox_sdk_py.reader
-   :parts: 1
+.. graphviz::
    :caption: Reader implementations (NfcReader and SmartCard reader)
+
+   digraph reader_hierarchy {
+      rankdir=TB;
+      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      edge [arrowsize=0.7, color=black];
+      
+      // Base abstract class
+      Reader [label="<<abstract>>\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()"];
+      
+      // Concrete implementations
+      NfcReader [label="NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\n+ connect()\n+ send()"];
+      SmartCardReader [label="SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\n+ connect()\n+ send()"];
+      
+      // Reader module exceptions
+      ReaderException [label="ReaderException", fontsize=9];
+      CardException [label="CardException", fontsize=9];
+      ConnException [label="ConnectionException", fontsize=9];
+      
+      // Inheritance
+      Reader -> NfcReader;
+      Reader -> SmartCardReader;
+      
+      // Group exceptions
+      subgraph cluster_exceptions {
+         label="Reader Module Exceptions";
+         style=dashed;
+         fontsize=9;
+         color=black;
+         fontcolor=black;
+         ReaderException; CardException; ConnException;
+      }
+   }
 
 Notes on Diagram Generation
 ----------------------------

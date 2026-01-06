@@ -11,13 +11,13 @@
 <!-- Start -->
 <g id="node1" class="node">
 <title>Start</title>
-<ellipse fill="lightgreen" stroke="black" cx="135.5" cy="-428" rx="61.44" ry="18"/>
+<ellipse fill="none" stroke="black" cx="135.5" cy="-428" rx="61.44" ry="18"/>
 <text text-anchor="middle" x="135.5" y="-425.5" font-family="Arial" font-size="10.00">Application Request</text>
 </g>
 <!-- Card -->
 <g id="node2" class="node">
 <title>Card</title>
-<path fill="lightblue" stroke="black" d="M158,-364C158,-364 113,-364 113,-364 107,-364 101,-358 101,-352 101,-352 101,-340 101,-340 101,-334 107,-328 113,-328 113,-328 158,-328 158,-328 164,-328 170,-334 170,-340 170,-340 170,-352 170,-352 170,-358 164,-364 158,-364"/>
+<path fill="none" stroke="black" d="M158,-364C158,-364 113,-364 113,-364 107,-364 101,-358 101,-352 101,-352 101,-340 101,-340 101,-334 107,-328 113,-328 113,-328 158,-328 158,-328 164,-328 170,-334 170,-340 170,-340 170,-352 170,-352 170,-358 164,-364 158,-364"/>
 <text text-anchor="middle" x="135.5" y="-343.5" font-family="Arial" font-size="10.00">Card Object</text>
 </g>
 <!-- Start&#45;&gt;Card -->
@@ -30,7 +30,7 @@
 <!-- Connection -->
 <g id="node3" class="node">
 <title>Connection</title>
-<path fill="lightblue" stroke="black" d="M105,-282C105,-282 36,-282 36,-282 30,-282 24,-276 24,-270 24,-270 24,-258 24,-258 24,-252 30,-246 36,-246 36,-246 105,-246 105,-246 111,-246 117,-252 117,-258 117,-258 117,-270 117,-270 117,-276 111,-282 105,-282"/>
+<path fill="none" stroke="black" d="M105,-282C105,-282 36,-282 36,-282 30,-282 24,-276 24,-270 24,-270 24,-258 24,-258 24,-252 30,-246 36,-246 36,-246 105,-246 105,-246 111,-246 117,-252 117,-258 117,-258 117,-270 117,-270 117,-276 111,-282 105,-282"/>
 <text text-anchor="middle" x="70.5" y="-261.5" font-family="Arial" font-size="10.00">Connection Layer</text>
 </g>
 <!-- Card&#45;&gt;Connection -->
@@ -43,7 +43,7 @@
 <!-- Process -->
 <g id="node7" class="node">
 <title>Process</title>
-<path fill="lightblue" stroke="black" d="M250.5,-282C250.5,-282 174.5,-282 174.5,-282 168.5,-282 162.5,-276 162.5,-270 162.5,-270 162.5,-258 162.5,-258 162.5,-252 168.5,-246 174.5,-246 174.5,-246 250.5,-246 250.5,-246 256.5,-246 262.5,-252 262.5,-258 262.5,-258 262.5,-270 262.5,-270 262.5,-276 256.5,-282 250.5,-282"/>
+<path fill="none" stroke="black" d="M250.5,-282C250.5,-282 174.5,-282 174.5,-282 168.5,-282 162.5,-276 162.5,-270 162.5,-270 162.5,-258 162.5,-258 162.5,-252 168.5,-246 174.5,-246 174.5,-246 250.5,-246 250.5,-246 256.5,-246 262.5,-252 262.5,-258 262.5,-258 262.5,-270 262.5,-270 262.5,-276 256.5,-282 250.5,-282"/>
 <text text-anchor="middle" x="212.5" y="-261.5" font-family="Arial" font-size="10.00">Process Response</text>
 </g>
 <!-- Card&#45;&gt;Process -->
@@ -63,7 +63,7 @@
 <!-- APDU -->
 <g id="node4" class="node">
 <title>APDU</title>
-<path fill="lightyellow" stroke="black" d="M81,-200C81,-200 12,-200 12,-200 6,-200 0,-194 0,-188 0,-188 0,-176 0,-176 0,-170 6,-164 12,-164 12,-164 81,-164 81,-164 87,-164 93,-170 93,-176 93,-176 93,-188 93,-188 93,-194 87,-200 81,-200"/>
+<path fill="none" stroke="black" d="M81,-200C81,-200 12,-200 12,-200 6,-200 0,-194 0,-188 0,-188 0,-176 0,-176 0,-170 6,-164 12,-164 12,-164 81,-164 81,-164 87,-164 93,-170 93,-176 93,-176 93,-188 93,-188 93,-194 87,-200 81,-200"/>
 <text text-anchor="middle" x="46.5" y="-179.5" font-family="Arial" font-size="10.00">APDU Command</text>
 </g>
 <!-- Connection&#45;&gt;APDU -->
@@ -76,7 +76,7 @@
 <!-- SmartCard -->
 <g id="node5" class="node">
 <title>SmartCard</title>
-<path fill="orange" stroke="black" d="M81,-118C81,-118 38,-118 38,-118 32,-118 26,-112 26,-106 26,-106 26,-94 26,-94 26,-88 32,-82 38,-82 38,-82 81,-82 81,-82 87,-82 93,-88 93,-94 93,-94 93,-106 93,-106 93,-112 87,-118 81,-118"/>
+<path fill="none" stroke="black" d="M81,-118C81,-118 38,-118 38,-118 32,-118 26,-112 26,-106 26,-106 26,-94 26,-94 26,-88 32,-82 38,-82 38,-82 81,-82 81,-82 87,-82 93,-88 93,-94 93,-94 93,-106 93,-106 93,-112 87,-118 81,-118"/>
 <text text-anchor="middle" x="59.5" y="-97.5" font-family="Arial" font-size="10.00">Smart Card</text>
 </g>
 <!-- APDU&#45;&gt;SmartCard -->
@@ -89,7 +89,7 @@
 <!-- Response -->
 <g id="node6" class="node">
 <title>Response</title>
-<path fill="lightyellow" stroke="black" d="M121,-36C121,-36 60,-36 60,-36 54,-36 48,-30 48,-24 48,-24 48,-12 48,-12 48,-6 54,0 60,0 60,0 121,0 121,0 127,0 133,-6 133,-12 133,-12 133,-24 133,-24 133,-30 127,-36 121,-36"/>
+<path fill="none" stroke="black" d="M121,-36C121,-36 60,-36 60,-36 54,-36 48,-30 48,-24 48,-24 48,-12 48,-12 48,-6 54,0 60,0 60,0 121,0 121,0 127,0 133,-6 133,-12 133,-12 133,-24 133,-24 133,-30 127,-36 121,-36"/>
 <text text-anchor="middle" x="90.5" y="-15.5" font-family="Arial" font-size="10.00">Card Response</text>
 </g>
 <!-- SmartCard&#45;&gt;Response -->
@@ -109,7 +109,7 @@
 <!-- Result -->
 <g id="node8" class="node">
 <title>Result</title>
-<ellipse fill="lightgreen" stroke="black" cx="212.5" cy="-182" rx="45.15" ry="18"/>
+<ellipse fill="none" stroke="black" cx="212.5" cy="-182" rx="45.15" ry="18"/>
 <text text-anchor="middle" x="212.5" y="-179.5" font-family="Arial" font-size="10.00">Return Result</text>
 </g>
 <!-- Process&#45;&gt;Result -->
