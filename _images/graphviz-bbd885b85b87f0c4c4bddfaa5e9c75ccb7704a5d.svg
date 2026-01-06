@@ -16,26 +16,26 @@
 <!-- Reader -->
 <g id="node1" class="node">
 <title>Reader</title>
-<path fill="none" stroke="black" d="M193,-206C193,-206 86,-206 86,-206 80,-206 74,-200 74,-194 74,-194 74,-122 74,-122 74,-116 80,-110 86,-110 86,-110 193,-110 193,-110 199,-110 205,-116 205,-122 205,-122 205,-194 205,-194 205,-200 199,-206 193,-206"/>
+<path fill="gray" stroke="black" d="M193,-206C193,-206 86,-206 86,-206 80,-206 74,-200 74,-194 74,-194 74,-122 74,-122 74,-116 80,-110 86,-110 86,-110 193,-110 193,-110 199,-110 205,-116 205,-122 205,-122 205,-194 205,-194 205,-200 199,-206 193,-206"/>
 <text text-anchor="middle" x="139.5" y="-194" font-family="Arial" font-size="10.00">&lt;&lt;abstract&gt;&gt;</text>
 <text text-anchor="middle" x="139.5" y="-183" font-family="Arial" font-size="10.00">Reader</text>
 <text text-anchor="middle" x="139.5" y="-172" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="139.5" y="-161" font-family="Arial" font-size="10.00"># _connection</text>
+<text text-anchor="middle" x="139.5" y="-161" font-family="Arial" font-size="10.00">_connection</text>
 <text text-anchor="middle" x="139.5" y="-150" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="139.5" y="-139" font-family="Arial" font-size="10.00">+ connect() «abstract»</text>
-<text text-anchor="middle" x="139.5" y="-128" font-family="Arial" font-size="10.00">+ send() «abstract»</text>
-<text text-anchor="middle" x="139.5" y="-117" font-family="Arial" font-size="10.00">+ bool()</text>
+<text text-anchor="middle" x="139.5" y="-139" font-family="Arial" font-size="10.00">connect()</text>
+<text text-anchor="middle" x="139.5" y="-128" font-family="Arial" font-size="10.00">send()</text>
+<text text-anchor="middle" x="139.5" y="-117" font-family="Arial" font-size="10.00">bool()</text>
 </g>
 <!-- NfcReader -->
 <g id="node2" class="node">
 <title>NfcReader</title>
-<path fill="none" stroke="black" d="M119,-74C119,-74 12,-74 12,-74 6,-74 0,-68 0,-62 0,-62 0,-12 0,-12 0,-6 6,0 12,0 12,0 119,0 119,0 125,0 131,-6 131,-12 131,-12 131,-62 131,-62 131,-68 125,-74 119,-74"/>
+<path fill="lightgray" stroke="black" d="M119,-74C119,-74 12,-74 12,-74 6,-74 0,-68 0,-62 0,-62 0,-12 0,-12 0,-6 6,0 12,0 12,0 119,0 119,0 125,0 131,-6 131,-12 131,-12 131,-62 131,-62 131,-68 125,-74 119,-74"/>
 <text text-anchor="middle" x="65.5" y="-62" font-family="Arial" font-size="10.00">NfcReader</text>
 <text text-anchor="middle" x="65.5" y="-51" font-family="Arial" font-size="10.00">─────────────────</text>
 <text text-anchor="middle" x="65.5" y="-40" font-family="Arial" font-size="10.00">xantares/nfc&#45;binding</text>
 <text text-anchor="middle" x="65.5" y="-29" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="65.5" y="-18" font-family="Arial" font-size="10.00">+ connect()</text>
-<text text-anchor="middle" x="65.5" y="-7" font-family="Arial" font-size="10.00">+ send()</text>
+<text text-anchor="middle" x="65.5" y="-18" font-family="Arial" font-size="10.00">connect()</text>
+<text text-anchor="middle" x="65.5" y="-7" font-family="Arial" font-size="10.00">send()</text>
 </g>
 <!-- Reader&#45;&gt;NfcReader -->
 <g id="edge1" class="edge">
@@ -46,13 +46,13 @@
 <!-- SmartCardReader -->
 <g id="node3" class="node">
 <title>SmartCardReader</title>
-<path fill="none" stroke="black" d="M268,-74C268,-74 161,-74 161,-74 155,-74 149,-68 149,-62 149,-62 149,-12 149,-12 149,-6 155,0 161,0 161,0 268,0 268,0 274,0 280,-6 280,-12 280,-12 280,-62 280,-62 280,-68 274,-74 268,-74"/>
+<path fill="lightgray" stroke="black" d="M268,-74C268,-74 161,-74 161,-74 155,-74 149,-68 149,-62 149,-62 149,-12 149,-12 149,-6 155,0 161,0 161,0 268,0 268,0 274,0 280,-6 280,-12 280,-12 280,-62 280,-62 280,-68 274,-74 268,-74"/>
 <text text-anchor="middle" x="214.5" y="-62" font-family="Arial" font-size="10.00">SmartCard</text>
 <text text-anchor="middle" x="214.5" y="-51" font-family="Arial" font-size="10.00">─────────────────</text>
 <text text-anchor="middle" x="214.5" y="-40" font-family="Arial" font-size="10.00">pyscard/smartcard</text>
 <text text-anchor="middle" x="214.5" y="-29" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="214.5" y="-18" font-family="Arial" font-size="10.00">+ connect()</text>
-<text text-anchor="middle" x="214.5" y="-7" font-family="Arial" font-size="10.00">+ send()</text>
+<text text-anchor="middle" x="214.5" y="-18" font-family="Arial" font-size="10.00">connect()</text>
+<text text-anchor="middle" x="214.5" y="-7" font-family="Arial" font-size="10.00">send()</text>
 </g>
 <!-- Reader&#45;&gt;SmartCardReader -->
 <g id="edge2" class="edge">
@@ -63,19 +63,19 @@
 <!-- ReaderException -->
 <g id="node4" class="node">
 <title>ReaderException</title>
-<path fill="none" stroke="black" d="M517.5,-176C517.5,-176 453.5,-176 453.5,-176 447.5,-176 441.5,-170 441.5,-164 441.5,-164 441.5,-152 441.5,-152 441.5,-146 447.5,-140 453.5,-140 453.5,-140 517.5,-140 517.5,-140 523.5,-140 529.5,-146 529.5,-152 529.5,-152 529.5,-164 529.5,-164 529.5,-170 523.5,-176 517.5,-176"/>
+<path fill="lightgray" stroke="black" d="M517.5,-176C517.5,-176 453.5,-176 453.5,-176 447.5,-176 441.5,-170 441.5,-164 441.5,-164 441.5,-152 441.5,-152 441.5,-146 447.5,-140 453.5,-140 453.5,-140 517.5,-140 517.5,-140 523.5,-140 529.5,-146 529.5,-152 529.5,-152 529.5,-164 529.5,-164 529.5,-170 523.5,-176 517.5,-176"/>
 <text text-anchor="middle" x="485.5" y="-155.8" font-family="Arial" font-size="9.00">ReaderException</text>
 </g>
 <!-- CardException -->
 <g id="node5" class="node">
 <title>CardException</title>
-<path fill="none" stroke="black" d="M411,-176C411,-176 358,-176 358,-176 352,-176 346,-170 346,-164 346,-164 346,-152 346,-152 346,-146 352,-140 358,-140 358,-140 411,-140 411,-140 417,-140 423,-146 423,-152 423,-152 423,-164 423,-164 423,-170 417,-176 411,-176"/>
+<path fill="lightgray" stroke="black" d="M411,-176C411,-176 358,-176 358,-176 352,-176 346,-170 346,-164 346,-164 346,-152 346,-152 346,-146 352,-140 358,-140 358,-140 411,-140 411,-140 417,-140 423,-146 423,-152 423,-152 423,-164 423,-164 423,-170 417,-176 411,-176"/>
 <text text-anchor="middle" x="384.5" y="-155.8" font-family="Arial" font-size="9.00">CardException</text>
 </g>
 <!-- ConnException -->
 <g id="node6" class="node">
 <title>ConnException</title>
-<path fill="none" stroke="black" d="M315.5,-176C315.5,-176 235.5,-176 235.5,-176 229.5,-176 223.5,-170 223.5,-164 223.5,-164 223.5,-152 223.5,-152 223.5,-146 229.5,-140 235.5,-140 235.5,-140 315.5,-140 315.5,-140 321.5,-140 327.5,-146 327.5,-152 327.5,-152 327.5,-164 327.5,-164 327.5,-170 321.5,-176 315.5,-176"/>
+<path fill="lightgray" stroke="black" d="M315.5,-176C315.5,-176 235.5,-176 235.5,-176 229.5,-176 223.5,-170 223.5,-164 223.5,-164 223.5,-152 223.5,-152 223.5,-146 229.5,-140 235.5,-140 235.5,-140 315.5,-140 315.5,-140 321.5,-140 327.5,-146 327.5,-152 327.5,-152 327.5,-164 327.5,-164 327.5,-170 321.5,-176 315.5,-176"/>
 <text text-anchor="middle" x="275.5" y="-155.8" font-family="Arial" font-size="9.00">ConnectionException</text>
 </g>
 </g>

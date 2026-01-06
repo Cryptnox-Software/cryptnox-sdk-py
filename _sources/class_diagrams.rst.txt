@@ -41,23 +41,23 @@ Complete class hierarchy for all card-related classes:
 
    digraph card_module {
       rankdir=TB;
-      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
       edge [arrowsize=0.7, color=black];
       
       // Base abstract class
-      Base [label="<<abstract>>\nBase\n─────────────────\n+ serial_number\n+ applet_version\n+ connection\n─────────────────\n+ verify_pin()\n+ sign()\n+ derive()\n+ get_public_key()\n..."];
+      Base [label="<<abstract>>\nBase\n─────────────────\nserial_number\napplet_version\nconnection\n─────────────────\nverify_pin()\nsign()\nderive()\nget_public_key()\n...", fillcolor=gray];
       
       // Concrete card implementations
-      BasicG1 [label="BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\n+ generate_seed()\n+ load_seed()\n+ dual_seed_**()"];
+      BasicG1 [label="BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\ngenerate_seed()\nload_seed()\ndual_seed_**()"];
       
-      Nft [label="Nft\n─────────────────\nNFT Card\n─────────────────\n+ slot operations\n+ RSA operations"];
+      Nft [label="Nft\n─────────────────\nNFT Card\n─────────────────\nslot operations\nRSA operations"];
       
       // Support classes
-      UserData [label="UserData\n─────────────────\n+ read()\n+ write()", fontsize=9];
+      UserData [label="UserData\n─────────────────\nread()\nwrite()", fontsize=9];
       
-      CustomBits [label="CustomBits\n─────────────────\n+ read()\n+ write()", fontsize=9];
+      CustomBits [label="CustomBits\n─────────────────\nread()\nwrite()", fontsize=9];
       
-      Authenticity [label="authenticity\n(module)\n─────────────────\n+ genuine_check()", fontsize=9];
+      Authenticity [label="authenticity\n(module)\n─────────────────\ngenuine_check()", fontsize=9];
       
       // Inheritance
       Base -> BasicG1;
@@ -81,11 +81,11 @@ The SDK defines a custom exception hierarchy for different error scenarios:
       nodesep=0.3;
       ranksep=1.5;
       size="20,14";
-      node [shape=box, style="rounded", fontsize=12, color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", fontsize=12, color=black, fontcolor=black, fillcolor=lightgray];
       edge [arrowsize=0.8, color=black];
       
       // Base exception
-      CryptnoxException [fontsize=14, label="CryptnoxException\n(Base)"];
+      CryptnoxException [fontsize=14, label="CryptnoxException\n(Base)", fillcolor=gray];
       
       // All child exceptions
       CardException;
@@ -152,12 +152,12 @@ The SDK uses several enumerations for type safety:
 
    digraph enums {
       rankdir=TB;
-      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
       edge [arrowsize=0.7, color=black];
       
       // Python base classes
-      Enum [label="enum.Enum", fontsize=9];
-      IntEnum [label="enum.IntEnum", fontsize=9];
+      Enum [label="enum.Enum", fontsize=9, fillcolor=gray];
+      IntEnum [label="enum.IntEnum", fontsize=9, fillcolor=gray];
       
       // SDK Enums inheriting from Enum
       AuthType [label="AuthType\n─────────\nNO_AUTH = 0\nPIN = 1\nUSER_KEY = 2"];
@@ -188,18 +188,18 @@ Classes related to card connection and communication:
 
    digraph connection_components {
       rankdir=TB;
-      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
       edge [arrowsize=0.7, color=black];
       
       // Python base classes
-      ContextDecorator [label="contextlib.ContextDecorator", fontsize=9];
-      ABCMeta [label="abc.ABCMeta\n(metaclass)", fontsize=9];
+      ContextDecorator [label="contextlib.ContextDecorator", fontsize=9, fillcolor=gray];
+      ABCMeta [label="abc.ABCMeta\n(metaclass)", fontsize=9, fillcolor=gray];
       
       // Connection class
-      Connection [label="Connection\n─────────────────\n+ index: int\n+ debug: bool\n+ remote: bool\n+ session_public_key: str\n─────────────────\n+ send_apdu()\n+ send_encrypted()\n+ disconnect()\n+ remote_read()"];
+      Connection [label="Connection\n─────────────────\nindex: int\ndebug: bool\nremote: bool\nsession_public_key: str\n─────────────────\nsend_apdu()\nsend_encrypted()\ndisconnect()\nremote_read()"];
       
       // Reader abstract class
-      Reader [label="<<abstract>>\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()"];
+      Reader [label="<<abstract>>\nReader\n─────────────────\n_connection\n─────────────────\nconnect()\nsend()\nbool()", fillcolor=gray];
       
       // Inheritance
       ContextDecorator -> Connection;
@@ -216,11 +216,11 @@ The following diagram shows the high-level architecture of the SDK:
 
    digraph cryptnox_architecture {
       rankdir=LR;
-      node [shape=box, style="rounded", color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", color=black, fontcolor=black, fillcolor=lightgray];
       edge [color=black];
       
       // Main components
-      User [label="User Application"];
+      User [label="User Application", fillcolor=gray];
       Factory [label="Factory\n(get_card)"];
       Reader [label="Reader"];
       Connection [label="Connection"];
@@ -231,7 +231,7 @@ The following diagram shows the high-level architecture of the SDK:
       BinaryUtils [label="Binary Utils"];
       
       // External
-      SmartCard [label="Smart Card\nHardware"];
+      SmartCard [label="Smart Card\nHardware", fillcolor=gray];
       
       // Relationships
       User -> Factory [label="creates"];
@@ -254,17 +254,17 @@ The following diagram illustrates the data flow during card operations:
 
    digraph card_operation_flow {
       rankdir=TB;
-      node [shape=box, style="rounded", color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", color=black, fontcolor=black, fillcolor=lightgray];
       edge [color=black];
       
-      Start [label="Application Request", shape=ellipse];
+      Start [label="Application Request", shape=ellipse, fillcolor=gray];
       Card [label="Card Object"];
       Connection [label="Connection Layer"];
       APDU [label="APDU Command"];
       SmartCard [label="Smart Card"];
       Response [label="Card Response"];
       Process [label="Process Response"];
-      Result [label="Return Result", shape=ellipse];
+      Result [label="Return Result", shape=ellipse, fillcolor=gray];
       
       Start -> Card [label="method call"];
       Card -> Connection [label="send request"];
@@ -285,16 +285,16 @@ Card Initialization Sequence
 
    digraph card_init {
       rankdir=TB;
-      node [shape=box, style="rounded", color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", color=black, fontcolor=black, fillcolor=lightgray];
       edge [color=black];
       
-      GetCard [label="get_card()", shape=ellipse];
+      GetCard [label="get_card()", shape=ellipse, fillcolor=gray];
       Detect [label="Detect Card Type"];
       Select [label="Select Applet"];
       Serial [label="Get Serial Number"];
       SessionKey [label="Get Session Key"];
       Instantiate [label="Instantiate Card Class"];
-      Ready [label="Card Ready", shape=ellipse];
+      Ready [label="Card Ready", shape=ellipse, fillcolor=gray];
       
       GetCard -> Detect;
       Detect -> Select;
@@ -314,15 +314,15 @@ The SDK supports different types of card readers:
 
    digraph reader_hierarchy {
       rankdir=TB;
-      node [shape=box, style="rounded", fontsize=10, color=black, fontcolor=black];
+      node [shape=box, style="rounded,filled", fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
       edge [arrowsize=0.7, color=black];
       
       // Base abstract class
-      Reader [label="<<abstract>>\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()"];
+      Reader [label="<<abstract>>\nReader\n─────────────────\n_connection\n─────────────────\nconnect()\nsend()\nbool()", fillcolor=gray];
       
       // Concrete implementations
-      NfcReader [label="NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\n+ connect()\n+ send()"];
-      SmartCardReader [label="SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\n+ connect()\n+ send()"];
+      NfcReader [label="NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\nconnect()\nsend()"];
+      SmartCardReader [label="SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\nconnect()\nsend()"];
       
       // Reader module exceptions
       ReaderException [label="ReaderException", fontsize=9];

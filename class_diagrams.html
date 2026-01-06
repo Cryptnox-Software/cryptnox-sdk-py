@@ -118,26 +118,26 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Complete Card Module<a class="headerlink" href="#complete-card-module" title="Link to this heading"></a></h2>
 <p>Complete class hierarchy for all card-related classes:</p>
 <figure class="align-default" id="id1">
-<div class="graphviz"><object data="_images/graphviz-18470349299b1728f8a63430428182d9eb5f30f8.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-169a5cb4fdb5a66b37134fc286972accce8432ba.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph card_module {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
    edge [arrowsize=0.7, color=black];
 
    // Base abstract class
-   Base [label=&quot;&lt;&lt;abstract&gt;&gt;\nBase\n─────────────────\n+ serial_number\n+ applet_version\n+ connection\n─────────────────\n+ verify_pin()\n+ sign()\n+ derive()\n+ get_public_key()\n...&quot;];
+   Base [label=&quot;&lt;&lt;abstract&gt;&gt;\nBase\n─────────────────\nserial_number\napplet_version\nconnection\n─────────────────\nverify_pin()\nsign()\nderive()\nget_public_key()\n...&quot;, fillcolor=gray];
 
    // Concrete card implementations
-   BasicG1 [label=&quot;BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\n+ generate_seed()\n+ load_seed()\n+ dual_seed_**()&quot;];
+   BasicG1 [label=&quot;BasicG1\n─────────────────\nBasic G1 Card\n─────────────────\ngenerate_seed()\nload_seed()\ndual_seed_**()&quot;];
 
-   Nft [label=&quot;Nft\n─────────────────\nNFT Card\n─────────────────\n+ slot operations\n+ RSA operations&quot;];
+   Nft [label=&quot;Nft\n─────────────────\nNFT Card\n─────────────────\nslot operations\nRSA operations&quot;];
 
    // Support classes
-   UserData [label=&quot;UserData\n─────────────────\n+ read()\n+ write()&quot;, fontsize=9];
+   UserData [label=&quot;UserData\n─────────────────\nread()\nwrite()&quot;, fontsize=9];
 
-   CustomBits [label=&quot;CustomBits\n─────────────────\n+ read()\n+ write()&quot;, fontsize=9];
+   CustomBits [label=&quot;CustomBits\n─────────────────\nread()\nwrite()&quot;, fontsize=9];
 
-   Authenticity [label=&quot;authenticity\n(module)\n─────────────────\n+ genuine_check()&quot;, fontsize=9];
+   Authenticity [label=&quot;authenticity\n(module)\n─────────────────\ngenuine_check()&quot;, fontsize=9];
 
    // Inheritance
    Base -&gt; BasicG1;
@@ -156,17 +156,17 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Exception Hierarchy<a class="headerlink" href="#exception-hierarchy" title="Link to this heading"></a></h2>
 <p>The SDK defines a custom exception hierarchy for different error scenarios:</p>
 <figure class="align-default" id="id2">
-<div class="graphviz"><object data="_images/graphviz-44a3e5a5dc2873e1e1a85c2ddca111c2a8448859.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-b501f6e34fac4ec35baebb854588dc3da1f179c0.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph exceptions {
    rankdir=LR;
    nodesep=0.3;
    ranksep=1.5;
    size=&quot;20,14&quot;;
-   node [shape=box, style=&quot;rounded&quot;, fontsize=12, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, fontsize=12, color=black, fontcolor=black, fillcolor=lightgray];
    edge [arrowsize=0.8, color=black];
 
    // Base exception
-   CryptnoxException [fontsize=14, label=&quot;CryptnoxException\n(Base)&quot;];
+   CryptnoxException [fontsize=14, label=&quot;CryptnoxException\n(Base)&quot;, fillcolor=gray];
 
    // All child exceptions
    CardException;
@@ -231,15 +231,15 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Enum Classes<a class="headerlink" href="#enum-classes" title="Link to this heading"></a></h2>
 <p>The SDK uses several enumerations for type safety:</p>
 <figure class="align-default" id="id3">
-<div class="graphviz"><object data="_images/graphviz-0054588aedb691ece492f6b7f4114aa6ef4aa99a.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-1dc005bc5e6dc2eef9f5f855bc3bb5ab8214ccea.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph enums {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
    edge [arrowsize=0.7, color=black];
 
    // Python base classes
-   Enum [label=&quot;enum.Enum&quot;, fontsize=9];
-   IntEnum [label=&quot;enum.IntEnum&quot;, fontsize=9];
+   Enum [label=&quot;enum.Enum&quot;, fontsize=9, fillcolor=gray];
+   IntEnum [label=&quot;enum.IntEnum&quot;, fontsize=9, fillcolor=gray];
 
    // SDK Enums inheriting from Enum
    AuthType [label=&quot;AuthType\n─────────\nNO_AUTH = 0\nPIN = 1\nUSER_KEY = 2&quot;];
@@ -268,21 +268,21 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Connection Components<a class="headerlink" href="#connection-components" title="Link to this heading"></a></h2>
 <p>Classes related to card connection and communication:</p>
 <figure class="align-default" id="id4">
-<div class="graphviz"><object data="_images/graphviz-8b6072a5eec8a7d7a3af6ef155d8dbe6bd762da7.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-8637ec6e9a76b1fdafa6bffb0284b18b8b8c1af2.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph connection_components {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
    edge [arrowsize=0.7, color=black];
 
    // Python base classes
-   ContextDecorator [label=&quot;contextlib.ContextDecorator&quot;, fontsize=9];
-   ABCMeta [label=&quot;abc.ABCMeta\n(metaclass)&quot;, fontsize=9];
+   ContextDecorator [label=&quot;contextlib.ContextDecorator&quot;, fontsize=9, fillcolor=gray];
+   ABCMeta [label=&quot;abc.ABCMeta\n(metaclass)&quot;, fontsize=9, fillcolor=gray];
 
    // Connection class
-   Connection [label=&quot;Connection\n─────────────────\n+ index: int\n+ debug: bool\n+ remote: bool\n+ session_public_key: str\n─────────────────\n+ send_apdu()\n+ send_encrypted()\n+ disconnect()\n+ remote_read()&quot;];
+   Connection [label=&quot;Connection\n─────────────────\nindex: int\ndebug: bool\nremote: bool\nsession_public_key: str\n─────────────────\nsend_apdu()\nsend_encrypted()\ndisconnect()\nremote_read()&quot;];
 
    // Reader abstract class
-   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()&quot;];
+   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n_connection\n─────────────────\nconnect()\nsend()\nbool()&quot;, fillcolor=gray];
 
    // Inheritance
    ContextDecorator -&gt; Connection;
@@ -297,14 +297,14 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Custom Architecture Diagram<a class="headerlink" href="#custom-architecture-diagram" title="Link to this heading"></a></h2>
 <p>The following diagram shows the high-level architecture of the SDK:</p>
 <figure class="align-default" id="id5">
-<div class="graphviz"><object data="_images/graphviz-2c7f671eb4f65ecd6517072595829518465a7047.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-75f37628e6d96436819ab7ef84412345f5465bfb.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph cryptnox_architecture {
    rankdir=LR;
-   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, color=black, fontcolor=black, fillcolor=lightgray];
    edge [color=black];
 
    // Main components
-   User [label=&quot;User Application&quot;];
+   User [label=&quot;User Application&quot;, fillcolor=gray];
    Factory [label=&quot;Factory\n(get_card)&quot;];
    Reader [label=&quot;Reader&quot;];
    Connection [label=&quot;Connection&quot;];
@@ -315,7 +315,7 @@ illustrate the relationships between classes, inheritance structures, and key co
    BinaryUtils [label=&quot;Binary Utils&quot;];
 
    // External
-   SmartCard [label=&quot;Smart Card\nHardware&quot;];
+   SmartCard [label=&quot;Smart Card\nHardware&quot;, fillcolor=gray];
 
    // Relationships
    User -&gt; Factory [label=&quot;creates&quot;];
@@ -336,20 +336,20 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Data Flow Diagram<a class="headerlink" href="#data-flow-diagram" title="Link to this heading"></a></h2>
 <p>The following diagram illustrates the data flow during card operations:</p>
 <figure class="align-default" id="id6">
-<div class="graphviz"><object data="_images/graphviz-cec59ebdf8da04b987bd722935da4c67403734f1.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-d92b4679174e7168cb062ab154456e7ef6e4a76f.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph card_operation_flow {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, color=black, fontcolor=black, fillcolor=lightgray];
    edge [color=black];
 
-   Start [label=&quot;Application Request&quot;, shape=ellipse];
+   Start [label=&quot;Application Request&quot;, shape=ellipse, fillcolor=gray];
    Card [label=&quot;Card Object&quot;];
    Connection [label=&quot;Connection Layer&quot;];
    APDU [label=&quot;APDU Command&quot;];
    SmartCard [label=&quot;Smart Card&quot;];
    Response [label=&quot;Card Response&quot;];
    Process [label=&quot;Process Response&quot;];
-   Result [label=&quot;Return Result&quot;, shape=ellipse];
+   Result [label=&quot;Return Result&quot;, shape=ellipse, fillcolor=gray];
 
    Start -&gt; Card [label=&quot;method call&quot;];
    Card -&gt; Connection [label=&quot;send request&quot;];
@@ -369,19 +369,19 @@ illustrate the relationships between classes, inheritance structures, and key co
 <section id="card-initialization-sequence">
 <h2>Card Initialization Sequence<a class="headerlink" href="#card-initialization-sequence" title="Link to this heading"></a></h2>
 <figure class="align-default" id="id7">
-<div class="graphviz"><object data="_images/graphviz-f55ac1396208d0ed34e0441c44af19fd04f64bbb.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-da23217d274c4e343e60f31af7855315fbb81576.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph card_init {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, color=black, fontcolor=black, fillcolor=lightgray];
    edge [color=black];
 
-   GetCard [label=&quot;get_card()&quot;, shape=ellipse];
+   GetCard [label=&quot;get_card()&quot;, shape=ellipse, fillcolor=gray];
    Detect [label=&quot;Detect Card Type&quot;];
    Select [label=&quot;Select Applet&quot;];
    Serial [label=&quot;Get Serial Number&quot;];
    SessionKey [label=&quot;Get Session Key&quot;];
    Instantiate [label=&quot;Instantiate Card Class&quot;];
-   Ready [label=&quot;Card Ready&quot;, shape=ellipse];
+   Ready [label=&quot;Card Ready&quot;, shape=ellipse, fillcolor=gray];
 
    GetCard -&gt; Detect;
    Detect -&gt; Select;
@@ -399,18 +399,18 @@ illustrate the relationships between classes, inheritance structures, and key co
 <h2>Reader Class Hierarchy<a class="headerlink" href="#reader-class-hierarchy" title="Link to this heading"></a></h2>
 <p>The SDK supports different types of card readers:</p>
 <figure class="align-default" id="id8">
-<div class="graphviz"><object data="_images/graphviz-6209b33292bacdc6381d6df67f36acf399bea3eb.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-bbd885b85b87f0c4c4bddfaa5e9c75ccb7704a5d.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph reader_hierarchy {
    rankdir=TB;
-   node [shape=box, style=&quot;rounded&quot;, fontsize=10, color=black, fontcolor=black];
+   node [shape=box, style=&quot;rounded,filled&quot;, fontsize=10, color=black, fontcolor=black, fillcolor=lightgray];
    edge [arrowsize=0.7, color=black];
 
    // Base abstract class
-   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n# _connection\n─────────────────\n+ connect() «abstract»\n+ send() «abstract»\n+ bool()&quot;];
+   Reader [label=&quot;&lt;&lt;abstract&gt;&gt;\nReader\n─────────────────\n_connection\n─────────────────\nconnect()\nsend()\nbool()&quot;, fillcolor=gray];
 
    // Concrete implementations
-   NfcReader [label=&quot;NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\n+ connect()\n+ send()&quot;];
-   SmartCardReader [label=&quot;SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\n+ connect()\n+ send()&quot;];
+   NfcReader [label=&quot;NfcReader\n─────────────────\nxantares/nfc-binding\n─────────────────\nconnect()\nsend()&quot;];
+   SmartCardReader [label=&quot;SmartCard\n─────────────────\npyscard/smartcard\n─────────────────\nconnect()\nsend()&quot;];
 
    // Reader module exceptions
    ReaderException [label=&quot;ReaderException&quot;, fontsize=9];

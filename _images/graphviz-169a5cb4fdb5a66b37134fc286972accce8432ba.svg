@@ -11,31 +11,31 @@
 <!-- Base -->
 <g id="node1" class="node">
 <title>Base</title>
-<path fill="none" stroke="black" d="M342,-271C342,-271 235,-271 235,-271 229,-271 223,-265 223,-259 223,-259 223,-143 223,-143 223,-137 229,-131 235,-131 235,-131 342,-131 342,-131 348,-131 354,-137 354,-143 354,-143 354,-259 354,-259 354,-265 348,-271 342,-271"/>
+<path fill="gray" stroke="black" d="M342,-271C342,-271 235,-271 235,-271 229,-271 223,-265 223,-259 223,-259 223,-143 223,-143 223,-137 229,-131 235,-131 235,-131 342,-131 342,-131 348,-131 354,-137 354,-143 354,-143 354,-259 354,-259 354,-265 348,-271 342,-271"/>
 <text text-anchor="middle" x="288.5" y="-259" font-family="Arial" font-size="10.00">&lt;&lt;abstract&gt;&gt;</text>
 <text text-anchor="middle" x="288.5" y="-248" font-family="Arial" font-size="10.00">Base</text>
 <text text-anchor="middle" x="288.5" y="-237" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="288.5" y="-226" font-family="Arial" font-size="10.00">+ serial_number</text>
-<text text-anchor="middle" x="288.5" y="-215" font-family="Arial" font-size="10.00">+ applet_version</text>
-<text text-anchor="middle" x="288.5" y="-204" font-family="Arial" font-size="10.00">+ connection</text>
+<text text-anchor="middle" x="288.5" y="-226" font-family="Arial" font-size="10.00">serial_number</text>
+<text text-anchor="middle" x="288.5" y="-215" font-family="Arial" font-size="10.00">applet_version</text>
+<text text-anchor="middle" x="288.5" y="-204" font-family="Arial" font-size="10.00">connection</text>
 <text text-anchor="middle" x="288.5" y="-193" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="288.5" y="-182" font-family="Arial" font-size="10.00">+ verify_pin()</text>
-<text text-anchor="middle" x="288.5" y="-171" font-family="Arial" font-size="10.00">+ sign()</text>
-<text text-anchor="middle" x="288.5" y="-160" font-family="Arial" font-size="10.00">+ derive()</text>
-<text text-anchor="middle" x="288.5" y="-149" font-family="Arial" font-size="10.00">+ get_public_key()</text>
+<text text-anchor="middle" x="288.5" y="-182" font-family="Arial" font-size="10.00">verify_pin()</text>
+<text text-anchor="middle" x="288.5" y="-171" font-family="Arial" font-size="10.00">sign()</text>
+<text text-anchor="middle" x="288.5" y="-160" font-family="Arial" font-size="10.00">derive()</text>
+<text text-anchor="middle" x="288.5" y="-149" font-family="Arial" font-size="10.00">get_public_key()</text>
 <text text-anchor="middle" x="288.5" y="-138" font-family="Arial" font-size="10.00">...</text>
 </g>
 <!-- BasicG1 -->
 <g id="node2" class="node">
 <title>BasicG1</title>
-<path fill="none" stroke="black" d="M119,-85C119,-85 12,-85 12,-85 6,-85 0,-79 0,-73 0,-73 0,-12 0,-12 0,-6 6,0 12,0 12,0 119,0 119,0 125,0 131,-6 131,-12 131,-12 131,-73 131,-73 131,-79 125,-85 119,-85"/>
+<path fill="lightgray" stroke="black" d="M119,-85C119,-85 12,-85 12,-85 6,-85 0,-79 0,-73 0,-73 0,-12 0,-12 0,-6 6,0 12,0 12,0 119,0 119,0 125,0 131,-6 131,-12 131,-12 131,-73 131,-73 131,-79 125,-85 119,-85"/>
 <text text-anchor="middle" x="65.5" y="-73" font-family="Arial" font-size="10.00">BasicG1</text>
 <text text-anchor="middle" x="65.5" y="-62" font-family="Arial" font-size="10.00">─────────────────</text>
 <text text-anchor="middle" x="65.5" y="-51" font-family="Arial" font-size="10.00">Basic G1 Card</text>
 <text text-anchor="middle" x="65.5" y="-40" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="65.5" y="-29" font-family="Arial" font-size="10.00">+ generate_seed()</text>
-<text text-anchor="middle" x="65.5" y="-18" font-family="Arial" font-size="10.00">+ load_seed()</text>
-<text text-anchor="middle" x="65.5" y="-7" font-family="Arial" font-size="10.00">+ dual_seed_**()</text>
+<text text-anchor="middle" x="65.5" y="-29" font-family="Arial" font-size="10.00">generate_seed()</text>
+<text text-anchor="middle" x="65.5" y="-18" font-family="Arial" font-size="10.00">load_seed()</text>
+<text text-anchor="middle" x="65.5" y="-7" font-family="Arial" font-size="10.00">dual_seed_**()</text>
 </g>
 <!-- Base&#45;&gt;BasicG1 -->
 <g id="edge1" class="edge">
@@ -46,13 +46,13 @@
 <!-- Nft -->
 <g id="node3" class="node">
 <title>Nft</title>
-<path fill="none" stroke="black" d="M268,-79.5C268,-79.5 161,-79.5 161,-79.5 155,-79.5 149,-73.5 149,-67.5 149,-67.5 149,-17.5 149,-17.5 149,-11.5 155,-5.5 161,-5.5 161,-5.5 268,-5.5 268,-5.5 274,-5.5 280,-11.5 280,-17.5 280,-17.5 280,-67.5 280,-67.5 280,-73.5 274,-79.5 268,-79.5"/>
+<path fill="lightgray" stroke="black" d="M268,-79.5C268,-79.5 161,-79.5 161,-79.5 155,-79.5 149,-73.5 149,-67.5 149,-67.5 149,-17.5 149,-17.5 149,-11.5 155,-5.5 161,-5.5 161,-5.5 268,-5.5 268,-5.5 274,-5.5 280,-11.5 280,-17.5 280,-17.5 280,-67.5 280,-67.5 280,-73.5 274,-79.5 268,-79.5"/>
 <text text-anchor="middle" x="214.5" y="-67.5" font-family="Arial" font-size="10.00">Nft</text>
 <text text-anchor="middle" x="214.5" y="-56.5" font-family="Arial" font-size="10.00">─────────────────</text>
 <text text-anchor="middle" x="214.5" y="-45.5" font-family="Arial" font-size="10.00">NFT Card</text>
 <text text-anchor="middle" x="214.5" y="-34.5" font-family="Arial" font-size="10.00">─────────────────</text>
-<text text-anchor="middle" x="214.5" y="-23.5" font-family="Arial" font-size="10.00">+ slot operations</text>
-<text text-anchor="middle" x="214.5" y="-12.5" font-family="Arial" font-size="10.00">+ RSA operations</text>
+<text text-anchor="middle" x="214.5" y="-23.5" font-family="Arial" font-size="10.00">slot operations</text>
+<text text-anchor="middle" x="214.5" y="-12.5" font-family="Arial" font-size="10.00">RSA operations</text>
 </g>
 <!-- Base&#45;&gt;Nft -->
 <g id="edge2" class="edge">
@@ -63,11 +63,11 @@
 <!-- UserData -->
 <g id="node4" class="node">
 <title>UserData</title>
-<path fill="none" stroke="black" d="M417,-66.5C417,-66.5 310,-66.5 310,-66.5 304,-66.5 298,-60.5 298,-54.5 298,-54.5 298,-30.5 298,-30.5 298,-24.5 304,-18.5 310,-18.5 310,-18.5 417,-18.5 417,-18.5 423,-18.5 429,-24.5 429,-30.5 429,-30.5 429,-54.5 429,-54.5 429,-60.5 423,-66.5 417,-66.5"/>
+<path fill="lightgray" stroke="black" d="M417,-66.5C417,-66.5 310,-66.5 310,-66.5 304,-66.5 298,-60.5 298,-54.5 298,-54.5 298,-30.5 298,-30.5 298,-24.5 304,-18.5 310,-18.5 310,-18.5 417,-18.5 417,-18.5 423,-18.5 429,-24.5 429,-30.5 429,-30.5 429,-54.5 429,-54.5 429,-60.5 423,-66.5 417,-66.5"/>
 <text text-anchor="middle" x="363.5" y="-55.3" font-family="Arial" font-size="9.00">UserData</text>
 <text text-anchor="middle" x="363.5" y="-45.3" font-family="Arial" font-size="9.00">─────────────────</text>
-<text text-anchor="middle" x="363.5" y="-35.3" font-family="Arial" font-size="9.00">+ read()</text>
-<text text-anchor="middle" x="363.5" y="-25.3" font-family="Arial" font-size="9.00">+ write()</text>
+<text text-anchor="middle" x="363.5" y="-35.3" font-family="Arial" font-size="9.00">read()</text>
+<text text-anchor="middle" x="363.5" y="-25.3" font-family="Arial" font-size="9.00">write()</text>
 </g>
 <!-- Base&#45;&gt;UserData -->
 <g id="edge3" class="edge">
@@ -79,11 +79,11 @@
 <!-- CustomBits -->
 <g id="node5" class="node">
 <title>CustomBits</title>
-<path fill="none" stroke="black" d="M566,-66.5C566,-66.5 459,-66.5 459,-66.5 453,-66.5 447,-60.5 447,-54.5 447,-54.5 447,-30.5 447,-30.5 447,-24.5 453,-18.5 459,-18.5 459,-18.5 566,-18.5 566,-18.5 572,-18.5 578,-24.5 578,-30.5 578,-30.5 578,-54.5 578,-54.5 578,-60.5 572,-66.5 566,-66.5"/>
+<path fill="lightgray" stroke="black" d="M566,-66.5C566,-66.5 459,-66.5 459,-66.5 453,-66.5 447,-60.5 447,-54.5 447,-54.5 447,-30.5 447,-30.5 447,-24.5 453,-18.5 459,-18.5 459,-18.5 566,-18.5 566,-18.5 572,-18.5 578,-24.5 578,-30.5 578,-30.5 578,-54.5 578,-54.5 578,-60.5 572,-66.5 566,-66.5"/>
 <text text-anchor="middle" x="512.5" y="-55.3" font-family="Arial" font-size="9.00">CustomBits</text>
 <text text-anchor="middle" x="512.5" y="-45.3" font-family="Arial" font-size="9.00">─────────────────</text>
-<text text-anchor="middle" x="512.5" y="-35.3" font-family="Arial" font-size="9.00">+ read()</text>
-<text text-anchor="middle" x="512.5" y="-25.3" font-family="Arial" font-size="9.00">+ write()</text>
+<text text-anchor="middle" x="512.5" y="-35.3" font-family="Arial" font-size="9.00">read()</text>
+<text text-anchor="middle" x="512.5" y="-25.3" font-family="Arial" font-size="9.00">write()</text>
 </g>
 <!-- Base&#45;&gt;CustomBits -->
 <g id="edge4" class="edge">
@@ -95,11 +95,11 @@
 <!-- Authenticity -->
 <g id="node6" class="node">
 <title>Authenticity</title>
-<path fill="none" stroke="black" d="M491,-225C491,-225 384,-225 384,-225 378,-225 372,-219 372,-213 372,-213 372,-189 372,-189 372,-183 378,-177 384,-177 384,-177 491,-177 491,-177 497,-177 503,-183 503,-189 503,-189 503,-213 503,-213 503,-219 497,-225 491,-225"/>
+<path fill="lightgray" stroke="black" d="M491,-225C491,-225 384,-225 384,-225 378,-225 372,-219 372,-213 372,-213 372,-189 372,-189 372,-183 378,-177 384,-177 384,-177 491,-177 491,-177 497,-177 503,-183 503,-189 503,-189 503,-213 503,-213 503,-219 497,-225 491,-225"/>
 <text text-anchor="middle" x="437.5" y="-213.8" font-family="Arial" font-size="9.00">authenticity</text>
 <text text-anchor="middle" x="437.5" y="-203.8" font-family="Arial" font-size="9.00">(module)</text>
 <text text-anchor="middle" x="437.5" y="-193.8" font-family="Arial" font-size="9.00">─────────────────</text>
-<text text-anchor="middle" x="437.5" y="-183.8" font-family="Arial" font-size="9.00">+ genuine_check()</text>
+<text text-anchor="middle" x="437.5" y="-183.8" font-family="Arial" font-size="9.00">genuine_check()</text>
 </g>
 </g>
 </svg>
