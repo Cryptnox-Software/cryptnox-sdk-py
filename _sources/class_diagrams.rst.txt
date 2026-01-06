@@ -79,13 +79,15 @@ The SDK defines a custom exception hierarchy for different error scenarios:
    digraph exceptions {
       rankdir=TB;
       splines=ortho;
-      nodesep=0.4;
-      ranksep=0.6;
-      node [shape=box, style="rounded", fontsize=10, width=1.8, color=black, fontcolor=black];
-      edge [arrowsize=0.7, color=black];
+      nodesep=0.8;
+      ranksep=1.0;
+      size="14,20";
+      ratio=fill;
+      node [shape=box, style="rounded", fontsize=14, width=2.2, height=0.6, color=black, fontcolor=black];
+      edge [arrowsize=1.0, color=black, penwidth=1.5];
       
       // Base exception
-      CryptnoxException [fontsize=11, label="CryptnoxException\n(Base)"];
+      CryptnoxException [fontsize=16, label="CryptnoxException\n(Base)", penwidth=2];
       
       // Row 1 - Card related
       subgraph cluster_row1 {
