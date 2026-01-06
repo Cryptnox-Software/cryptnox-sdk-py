@@ -77,61 +77,69 @@ The SDK defines a custom exception hierarchy for different error scenarios:
    :caption: Exception class hierarchy (expanded view)
 
    digraph exceptions {
-      rankdir=TB;
-      splines=ortho;
-      nodesep=0.8;
-      ranksep=1.0;
-      size="14,20";
-      ratio=fill;
-      node [shape=box, style="rounded", fontsize=14, width=2.2, height=0.6, color=black, fontcolor=black];
-      edge [arrowsize=1.0, color=black, penwidth=1.5];
+      rankdir=LR;
+      nodesep=0.3;
+      ranksep=1.5;
+      size="20,14";
+      node [shape=box, style="rounded", fontsize=12, color=black, fontcolor=black];
+      edge [arrowsize=0.8, color=black];
       
       // Base exception
-      CryptnoxException [fontsize=16, label="CryptnoxException\n(Base)", penwidth=2];
+      CryptnoxException [fontsize=14, label="CryptnoxException\n(Base)"];
       
-      // Row 1 - Card related
-      subgraph cluster_row1 {
-         style=invis;
-         CardException; CardClosedException; CardNotBlocked; CardTypeException;
-      }
-      
-      // Row 2 - Connection and Data
-      subgraph cluster_row2 {
-         style=invis;
-         ConnectionException; DataException; DataValidationException; CertificateException;
-      }
-      
-      // Row 3 - Key related
-      subgraph cluster_row3 {
-         style=invis;
-         KeyAlreadyGenerated; KeyGenerationException; KeySelectionException; DerivationSelectionException;
-      }
-      
-      // Row 4 - PIN/PUK/Auth
-      subgraph cluster_row4 {
-         style=invis;
-         PinException; PukException; PinAuthenticationException; SecureChannelException;
-      }
-      
-      // Row 5 - Other
-      subgraph cluster_row5 {
-         style=invis;
-         FirmwareException; GenericException; GenuineCheckException; InitializationException;
-      }
-      
-      // Row 6 - Remaining
-      subgraph cluster_row6 {
-         style=invis;
-         EOSKeyError; ReadPublicKeyException; ReaderException; SeedException; SoftLock;
-      }
+      // All child exceptions
+      CardException;
+      CardClosedException;
+      CardNotBlocked;
+      CardTypeException;
+      CertificateException;
+      ConnectionException;
+      DataException;
+      DataValidationException;
+      DerivationSelectionException;
+      EOSKeyError;
+      FirmwareException;
+      GenericException;
+      GenuineCheckException;
+      InitializationException;
+      KeyAlreadyGenerated;
+      KeyGenerationException;
+      KeySelectionException;
+      PinAuthenticationException;
+      PinException;
+      PukException;
+      ReadPublicKeyException;
+      ReaderException;
+      SecureChannelException;
+      SeedException;
+      SoftLock;
       
       // All edges from base
-      CryptnoxException -> {CardException CardClosedException CardNotBlocked CardTypeException};
-      CryptnoxException -> {ConnectionException DataException DataValidationException CertificateException};
-      CryptnoxException -> {KeyAlreadyGenerated KeyGenerationException KeySelectionException DerivationSelectionException};
-      CryptnoxException -> {PinException PukException PinAuthenticationException SecureChannelException};
-      CryptnoxException -> {FirmwareException GenericException GenuineCheckException InitializationException};
-      CryptnoxException -> {EOSKeyError ReadPublicKeyException ReaderException SeedException SoftLock};
+      CryptnoxException -> CardException;
+      CryptnoxException -> CardClosedException;
+      CryptnoxException -> CardNotBlocked;
+      CryptnoxException -> CardTypeException;
+      CryptnoxException -> CertificateException;
+      CryptnoxException -> ConnectionException;
+      CryptnoxException -> DataException;
+      CryptnoxException -> DataValidationException;
+      CryptnoxException -> DerivationSelectionException;
+      CryptnoxException -> EOSKeyError;
+      CryptnoxException -> FirmwareException;
+      CryptnoxException -> GenericException;
+      CryptnoxException -> GenuineCheckException;
+      CryptnoxException -> InitializationException;
+      CryptnoxException -> KeyAlreadyGenerated;
+      CryptnoxException -> KeyGenerationException;
+      CryptnoxException -> KeySelectionException;
+      CryptnoxException -> PinAuthenticationException;
+      CryptnoxException -> PinException;
+      CryptnoxException -> PukException;
+      CryptnoxException -> ReadPublicKeyException;
+      CryptnoxException -> ReaderException;
+      CryptnoxException -> SecureChannelException;
+      CryptnoxException -> SeedException;
+      CryptnoxException -> SoftLock;
    }
 
 Enum Classes
