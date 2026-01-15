@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cryptnox_sdk_py.cryptos.py2specials &mdash; cryptnox_sdk_py 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=ca7149ea" />
 
@@ -15,8 +15,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/custom.js?v=b6ee92be"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -126,8 +126,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">code_strings</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">code_strings</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">changebase</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">frm</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">frm</span> <span class="o">==</span> <span class="n">to</span><span class="p">:</span>
@@ -219,8 +218,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">code_strings</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">code_strings</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="lpad">
@@ -397,6 +395,16 @@
 <a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py2specials.random_string">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">random_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="from_jacobian">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py2specials.from_jacobian">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_jacobian</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert Jacobian coordinates to affine coordinates.&quot;&quot;&quot;</span>
+        <span class="c1"># Import P from main to avoid circular dependency</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">)</span></div>
 
 </pre></div>
 

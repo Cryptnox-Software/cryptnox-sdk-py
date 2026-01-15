@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cryptnox_sdk_py.cryptos.py3specials &mdash; cryptnox_sdk_py 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=ca7149ea" />
 
@@ -15,8 +15,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/custom.js?v=b6ee92be"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -92,7 +92,6 @@
 
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="n">string_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="n">string_or_bytes_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
     <span class="n">int_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
     <span class="c1"># Base switching</span>
@@ -125,8 +124,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">code_strings</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">code_strings</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base!&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="changebase">
@@ -162,7 +160,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">b</span>
 
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:02x}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">b</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s1">02x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">b</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="safe_from_hex">
@@ -216,7 +214,7 @@
 
         <span class="n">padding_element</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">256</span> <span class="k">else</span> <span class="sa">b</span><span class="s1">&#39;1&#39;</span> \
             <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">58</span> <span class="k">else</span> <span class="sa">b</span><span class="s1">&#39;0&#39;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">pad_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pad_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">result_bytes</span> <span class="o">=</span> <span class="n">padding_element</span><span class="o">*</span><span class="n">pad_size</span> <span class="o">+</span> <span class="n">result_bytes</span>
 
         <span class="n">result_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">result_bytes</span><span class="p">])</span>
@@ -234,7 +232,7 @@
         <span class="n">code_string</span> <span class="o">=</span> <span class="n">get_code_string</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="mi">256</span><span class="p">:</span>
-            <span class="k">def</span><span class="w"> </span><span class="nf">extract</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cs</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">extract</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_cs</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">d</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">extract</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cs</span><span class="p">):</span>
@@ -253,6 +251,129 @@
 <a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py3specials.random_string">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">random_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="from_jacobian">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py3specials.from_jacobian">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_jacobian</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert Jacobian coordinates to affine coordinates.&quot;&quot;&quot;</span>
+        <span class="c1"># Import P from main to avoid circular dependency</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="multiply">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py3specials.multiply">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">multiply</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">privkey</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Multiply a public key by a scalar (private key).&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">privkey</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">privkey_int</span> <span class="o">=</span> <span class="n">privkey</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">privkey_int</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">decode_privkey</span><span class="p">(</span><span class="n">privkey</span><span class="p">)</span>
+
+        <span class="c1"># Decode public key to get the point</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">pubkey</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span>
+
+        <span class="c1"># Fast multiplication using double-and-add algorithm</span>
+        <span class="k">if</span> <span class="n">privkey_int</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">privkey_int</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span>
+
+        <span class="c1"># Convert to Jacobian coordinates for faster computation</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Point at infinity in Jacobian</span>
+        <span class="n">addend</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">to_jacobian</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">privkey_int</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">privkey_int</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">jacobian_add</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">addend</span><span class="p">)</span>
+            <span class="n">addend</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">jacobian_double</span><span class="p">(</span><span class="n">addend</span><span class="p">)</span>
+            <span class="n">privkey_int</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+
+        <span class="c1"># Convert back to affine coordinates</span>
+        <span class="k">return</span> <span class="n">from_jacobian</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ecdsa_raw_verify">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py3specials.ecdsa_raw_verify">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ecdsa_raw_verify</span><span class="p">(</span><span class="n">msghash</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">pub</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify ECDSA signature.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">py2specials</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msghash</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">msghash</span> <span class="o">=</span> <span class="n">py2specials</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">msghash</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">sig</span>
+
+        <span class="c1"># Decode public key</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pub</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">pub</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span>
+
+        <span class="n">w</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">main</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">msghash</span>
+
+        <span class="n">u1</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">N</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">%</span> <span class="n">main</span><span class="o">.</span><span class="n">N</span>
+
+        <span class="c1"># Calculate point: u1*G + u2*pub</span>
+        <span class="n">point1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="n">u1</span><span class="p">)</span>
+        <span class="n">point2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">pub</span><span class="p">,</span> <span class="n">u2</span><span class="p">)</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">fast_add</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="ecdsa_recover">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.py3specials.ecdsa_recover">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ecdsa_recover</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recover public key from ECDSA signature.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">py2specials</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">msghash</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">electrum_sig_hash</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">v</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">_s</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">decode_sig</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">_s</span> <span class="o">=</span> <span class="n">sig</span>
+
+        <span class="c1"># Recovery parameter</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span>
+
+        <span class="c1"># Calculate y from x</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="n">A</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">main</span><span class="o">.</span><span class="n">P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">P</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">beta</span> <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">27</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">beta</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">P</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span>
+
+        <span class="c1"># Recovered point R</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Calculate public key: (r*R - z*G) / r</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">py2specials</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">msghash</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+
+        <span class="c1"># Calculate -e*G</span>
+        <span class="n">minus_e</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="n">e</span>
+        <span class="n">eG</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="n">minus_e</span><span class="p">)</span>
+
+        <span class="c1"># Calculate r*R</span>
+        <span class="n">rR</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+        <span class="c1"># Add the points</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">fast_add</span><span class="p">(</span><span class="n">rR</span><span class="p">,</span> <span class="n">eG</span><span class="p">)</span>
+
+        <span class="c1"># Divide by r (multiply by r^-1)</span>
+        <span class="n">r_inv</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">main</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">pubkey</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="n">r_inv</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pubkey</span></div>
 
 </pre></div>
 

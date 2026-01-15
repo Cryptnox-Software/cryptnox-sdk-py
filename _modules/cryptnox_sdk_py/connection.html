@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cryptnox_sdk_py.connection &mdash; cryptnox_sdk_py 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=ca7149ea" />
 
@@ -15,8 +15,8 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/custom.js?v=b6ee92be"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -93,6 +93,7 @@
     <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">Union</span>
 <span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialization</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cryptography.hazmat.primitives.asymmetric</span><span class="w"> </span><span class="kn">import</span> <span class="n">ec</span>
@@ -179,12 +180,12 @@
 <span class="sd">        This method properly closes the connection to the card reader without</span>
 <span class="sd">        deleting the Connection object itself.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_connection</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="kc">None</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">ConnectionException</span><span class="p">):</span>
+                <span class="c1"># Ignore disconnect errors: disconnect is best-effort and should not raise.</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Failed to disconnect from reader&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Connection.send_apdu">
@@ -201,7 +202,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t_env</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--&gt; sending : </span><span class="si">%i</span><span class="s2"> bytes data &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">apdu</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--&gt; sending : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">apdu</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="si">}</span><span class="s2"> bytes data &quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">list_to_hexadecimal</span><span class="p">(</span><span class="n">apdu</span><span class="p">))</span>
             <span class="n">t_env</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
@@ -215,8 +216,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="n">t_ans</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_env</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;-- received : </span><span class="si">%02x%02x</span><span class="s2"> : </span><span class="si">%i</span><span class="s2"> bytes data  --  time : </span><span class="si">%.1f</span><span class="s2"> ms&quot;</span>
-                  <span class="o">%</span> <span class="p">(</span><span class="n">status1</span><span class="p">,</span> <span class="n">status2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">t_ans</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;-- received : </span><span class="si">{</span><span class="n">status1</span><span class="si">:</span><span class="s2">02x</span><span class="si">}{</span><span class="n">status2</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes data  --  time : </span><span class="si">{</span><span class="n">t_ans</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> ms&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">list_to_hexadecimal</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_response_code</span><span class="p">(</span><span class="n">status1</span><span class="p">,</span> <span class="n">status2</span><span class="p">)</span>
@@ -243,7 +243,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="n">data_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--&gt; sending (SCP) : </span><span class="si">%i</span><span class="s2"> bytes data &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--&gt; sending (SCP) : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes data &quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">receive_long</span> <span class="ow">or</span> <span class="n">data_length</span> <span class="o">&gt;=</span> <span class="mi">256</span><span class="p">:</span>
                 <span class="n">send_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">data_length</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="n">data_length</span> <span class="o">&amp;</span> <span class="mi">255</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -260,8 +260,7 @@
         <span class="n">received</span> <span class="o">=</span> <span class="n">data_decoded</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_iv</span> <span class="o">=</span> <span class="n">rep</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;-- received (SCP) : </span><span class="si">%s</span><span class="s2"> : </span><span class="si">%i</span><span class="s2"> bytes data &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span>
-                                                                <span class="nb">len</span><span class="p">(</span><span class="n">received</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;-- received (SCP) : </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">received</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes data &quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">received</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_response_code</span><span class="p">(</span><span class="n">status</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">status</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -348,7 +347,7 @@
         <span class="n">session_public_key</span> <span class="o">=</span> <span class="n">session_private_key</span><span class="o">.</span><span class="n">public_key</span><span class="p">()</span><span class="o">.</span><span class="n">public_bytes</span><span class="p">(</span>
             <span class="n">serialization</span><span class="o">.</span><span class="n">Encoding</span><span class="o">.</span><span class="n">X962</span><span class="p">,</span>
             <span class="n">serialization</span><span class="o">.</span><span class="n">PublicFormat</span><span class="o">.</span><span class="n">UncompressedPoint</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">session_public_key</span><span class="p">))</span> <span class="o">+</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">session_public_key</span><span class="p">)</span><span class="si">:</span><span class="s2">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">+</span>
                              <span class="n">session_public_key</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
         <span class="n">apdu_osc</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">,</span> <span class="n">pairing_key_index</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">]</span> <span class="o">+</span> <span class="n">binary_to_list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_apdu</span><span class="p">(</span><span class="n">apdu_osc</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

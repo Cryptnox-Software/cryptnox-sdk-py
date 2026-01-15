@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cryptnox_sdk_py.cryptos.main &mdash; cryptnox_sdk_py 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=ca7149ea" />
 
@@ -15,8 +15,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/custom.js?v=b6ee92be"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -92,6 +92,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">hmac</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">builtins</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">ripemd</span>
 
 <span class="c1"># Elliptic curve parameters (secp256k1)</span>
@@ -108,7 +109,7 @@
 <div class="viewcode-block" id="change_curve">
 <a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.change_curve">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">change_curve</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span><span class="p">,</span> <span class="n">G</span>
+    <span class="k">global</span> <span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span><span class="p">,</span> <span class="n">G</span>  <span class="c1"># pylint: disable=global-statement</span>
     <span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span>
     <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">Gx</span><span class="p">,</span> <span class="n">Gy</span><span class="p">)</span></div>
 
@@ -147,12 +148,10 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">prop</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">prop</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">prop</span><span class="p">)]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">prop</span><span class="p">)]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">prop</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">prop</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">prop</span><span class="p">)]</span></div>
 
 
 
@@ -163,9 +162,9 @@
 
 
 
-<div class="viewcode-block" id="slice">
-<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.slice">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">slice</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">200</span><span class="p">):</span>
+<div class="viewcode-block" id="obj_slice">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.obj_slice">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">obj_slice</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">200</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">)]</span></div>
 
 
@@ -177,13 +176,10 @@
 
 
 
-<span class="n">_sum</span> <span class="o">=</span> <span class="nb">sum</span>
-
-
-<div class="viewcode-block" id="sum">
-<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.sum">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">_sum</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+<div class="viewcode-block" id="obj_sum">
+<a class="viewcode-back" href="../../../cryptnox_sdk_py.cryptos.html#cryptnox_sdk_py.cryptos.main.obj_sum">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">obj_sum</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">builtins</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
 
 
 
@@ -437,10 +433,11 @@
     <span class="n">f</span> <span class="o">=</span> <span class="n">get_pubkey_format</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span>
     <span class="k">if</span> <span class="s1">&#39;compressed&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pubkey</span>
-    <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;bin&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;bin&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;bin_compressed&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;hex&#39;</span> <span class="ow">or</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;decimal&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;hex_compressed&#39;</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">,</span> <span class="s1">&#39;decimal&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;hex_compressed&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pubkey</span>  <span class="c1"># Return as-is for unhandled formats</span></div>
 
 
 
@@ -450,10 +447,11 @@
     <span class="n">f</span> <span class="o">=</span> <span class="n">get_pubkey_format</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span>
     <span class="k">if</span> <span class="s1">&#39;compressed&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pubkey</span>
-    <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;bin_compressed&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;bin_compressed&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;bin&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;hex_compressed&#39;</span> <span class="ow">or</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;decimal&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;hex&#39;</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;hex_compressed&#39;</span><span class="p">,</span> <span class="s1">&#39;decimal&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode_pubkey</span><span class="p">(</span><span class="n">decode_pubkey</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s1">&#39;hex&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pubkey</span>  <span class="c1"># Return as-is for unhandled formats</span></div>
 
 
 
@@ -503,7 +501,7 @@
     <span class="n">digest</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;ripemd160&#39;</span><span class="p">,</span> <span class="n">intermed</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">digest</span> <span class="o">=</span> <span class="n">ripemd</span><span class="o">.</span><span class="n">RIPEMD160</span><span class="p">(</span><span class="n">intermed</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">digest</span></div>
 
@@ -543,7 +541,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">bin_ripemd160</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;ripemd160&#39;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">digest</span> <span class="o">=</span> <span class="n">ripemd</span><span class="o">.</span><span class="n">RIPEMD160</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">digest</span></div>
 
@@ -576,7 +574,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">bin_slowsha</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="n">string</span> <span class="o">=</span> <span class="n">py2specials</span><span class="o">.</span><span class="n">from_string_to_bytes</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="n">orig_input</span> <span class="o">=</span> <span class="n">string</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">string</span> <span class="o">+</span> <span class="n">orig_input</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">string</span></div>
 
@@ -693,7 +691,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">get_privkey_format</span><span class="p">(</span><span class="n">priv</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
@@ -704,7 +702,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">get_pubkey_format</span><span class="p">(</span><span class="n">pubkey</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
