@@ -308,7 +308,6 @@ class Base(metaclass=abc.ABCMeta):
         :raises exceptions.SeedException: If no seed exists on the card
         :raises exceptions.ReadPublicKeyException: If invalid data received from card
         """
-        pass
 
     def get_public_key_clear(self, derivation: int, path: str = "", compressed: bool = True) -> bytes:
         """
@@ -320,7 +319,6 @@ class Base(metaclass=abc.ABCMeta):
         :return: Public key in bytes format
         :raises exceptions.ReadPublicKeyException: If bad data received
         """
-        pass
 
     @abc.abstractmethod
     def set_pubexport(self, status: bool, p1: int, puk: str) -> None:
@@ -333,7 +331,6 @@ class Base(metaclass=abc.ABCMeta):
         :raises exceptions.DataValidationException: If p1 is invalid
         :raises exceptions.PukException: If PUK is incorrect
         """
-        pass
 
     @abc.abstractmethod
     def set_xpubread(self, status: bool, puk: str) -> None:
@@ -343,7 +340,6 @@ class Base(metaclass=abc.ABCMeta):
         :param status: True to enable, False to disable
         :param puk: PUK code
         """
-        pass
 
     @abc.abstractmethod
     def set_clearpubkey(self, status: bool, puk: str) -> None:
@@ -353,7 +349,6 @@ class Base(metaclass=abc.ABCMeta):
         :param status: True to enable, False to disable
         :param puk: PUK code
         """
-        pass
 
     @abc.abstractmethod
     def decrypt(self, p1: int, pubkey: bytes, encrypted_data: bytes = b"", pin: str = "") -> bytes:
@@ -385,7 +380,6 @@ class Base(metaclass=abc.ABCMeta):
         :raises exceptions.DataValidationException: If data length is incorrect
         :raises exceptions.GenericException: If other errors occur
         """
-        pass
 
     def history(self, index: int = 0) -> NamedTuple:
         """
@@ -457,7 +451,7 @@ class Base(metaclass=abc.ABCMeta):
             serialization.Encoding.X962,
             serialization.PublicFormat.UncompressedPoint)
 
-        send_public_key = bytes.fromhex("{:x}".format(len(session_public_key)) +
+        send_public_key = bytes.fromhex(f"{len(session_public_key):x}" +
                                         session_public_key.hex())
 
         public_key = ec.EllipticCurvePublicKey.from_encoded_point(
@@ -874,7 +868,8 @@ class Base(metaclass=abc.ABCMeta):
         return bytes([len(value_bytes)]) + value_bytes
 
     def _init_data(self, name: str, email: str, pin: str, puk: str,
-                   pairing_secret: bytes = BASIC_PAIRING_SECRET, nfc_sign: bool = False):
+                   pairing_secret: bytes = BASIC_PAIRING_SECRET,
+                   nfc_sign: bool = False):  # pylint: disable=unused-argument
         data = Base._get_coded_value(name) + Base._get_coded_value(email) + bytes(pin, 'ascii')
         data += bytes(puk, 'ascii') + pairing_secret
 
@@ -915,7 +910,6 @@ class Base(metaclass=abc.ABCMeta):
         :return: Manufacturer certificate in hexadecimal string or bytes format
         :rtype: Any
         """
-        pass
 
     def __repr__(self):
         return f'{{"serial": {self.serial_number}, "version": {self.applet_version}}}'

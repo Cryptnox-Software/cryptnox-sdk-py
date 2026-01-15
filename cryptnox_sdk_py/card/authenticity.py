@@ -36,7 +36,7 @@ def origin(connection: Connection, debug: bool = False) -> Origin:
     """
     try:
         certificates = _manufacturer_public_keys()
-    except Exception:
+    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError):
         return Origin.UNKNOWN
 
     if not certificates:
@@ -50,7 +50,7 @@ def origin(connection: Connection, debug: bool = False) -> Origin:
     for public_key in certificates:
         try:
             valid = _check_signature(certificate, public_key, signature)
-        except Exception:
+        except (ValueError, TypeError, InvalidSignature):
             error = True
         else:
             if valid:
@@ -193,7 +193,7 @@ def _manufacturer_certificate_data(connection: Connection, debug: bool = False) 
 
 def _get_card_certificate(connection: Connection, debug: bool = False) -> str:
     nonce = secrets.randbits(64)
-    nonce_list = hexadecimal_to_list("%0.16X" % nonce)
+    nonce_list = hexadecimal_to_list(f"{nonce:016X}")
     certificate = connection.send_apdu([0x80, 0xF8, 0x00, 0x00, 0x08] + nonce_list)[0]
 
     card_cert_hex = list_to_hexadecimal(certificate)

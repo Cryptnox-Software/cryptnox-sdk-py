@@ -48,8 +48,7 @@ if sys.version_info.major == 2:
     def get_code_string(base):
         if base in code_strings:
             return code_strings[base]
-        else:
-            raise ValueError("Invalid base!")
+        raise ValueError("Invalid base!")
 
     def changebase(string, frm, to, minlen=0):
         if frm == to:
@@ -136,8 +135,7 @@ else:
     def get_code_string(base):
         if base in code_strings:
             return code_strings[base]
-        else:
-            raise ValueError("Invalid base!")
+        raise ValueError("Invalid base!")
 
     def lpad(msg, symbol, length):
         if len(msg) >= length:
@@ -272,3 +270,10 @@ else:
 
     def random_string(x):
         return os.urandom(x)
+
+    def from_jacobian(p):
+        """Convert Jacobian coordinates to affine coordinates."""
+        # Import P from main to avoid circular dependency
+        from . import main
+        z = main.inv(p[2], main.P)
+        return ((p[0] * z**2) % main.P, (p[1] * z**3) % main.P)

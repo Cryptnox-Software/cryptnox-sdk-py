@@ -17,7 +17,7 @@ def list_to_hexadecimal(data: List[int], sep: str = "") -> str:
     :return: list
     :rtype: str
     """
-    return sep.join(["%0.2x" % x for x in data])
+    return sep.join([f"{x:02x}" for x in data])
 
 
 def hexadecimal_to_list(value: str) -> List[int]:

@@ -55,10 +55,6 @@ class Nft(basic_g1.BasicG1):
 
         super().set_pubexport(status, p1, puk)
 
-    def set_clearpubkey(self, status: bool, puk: str) -> None:
-
-        super().set_clearpubkey(status, puk)
-
     def generate_random_number(self, size: int) -> bytes:
         raise NotImplementedError("Card doesn't have this functionality")
 

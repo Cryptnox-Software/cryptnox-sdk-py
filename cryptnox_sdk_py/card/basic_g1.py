@@ -45,6 +45,8 @@ class BasicG1(base.Base):
         super().__init__(*args, **kwargs)
         self.user_data = UserData(self, reading_index_offset=1)
         self.custom_bits = CustomBits(self._data[4:], self._update_custom_bytes)
+        self.xpubread = False
+        self.clearpubrd = False
 
     def change_pairing_key(self, index: int, pairing_key: bytes, puk: str = "") -> None:
         if len(pairing_key) != 32:
@@ -123,20 +125,20 @@ class BasicG1(base.Base):
 
     def get_manufacturer_certificate(self, hexed: bool = True):
         idx_page = 0
-        response = self.connection.send_apdu([0x80, 0xF7, 0x00, idx_page, 0x00])[0]
-        if not response or len(response) < 2:
+        mnft_cert_resp = self.connection.send_apdu([0x80, 0xF7, 0x00, idx_page, 0x00])[0]
+        if not mnft_cert_resp or len(mnft_cert_resp) < 2:
             return "" if hexed else b""
 
-        cert_len = (response[0] << 8) + response[1]
-        while len(response) < (cert_len + 2):
+        cert_len = (mnft_cert_resp[0] << 8) + mnft_cert_resp[1]
+        while len(mnft_cert_resp) < (cert_len + 2):
             idx_page += 1
-            next_page = self.connection.send_apdu([0x80, 0xF7, 0x00, idx_page, 0x00])[0]
-            if not next_page:
-                break
-            response = response + next_page
-
-        cert_bytes = bytes(response[2:cert_len + 2])
-        return cert_bytes.hex() if hexed else cert_bytes
+            mnft_cert_resp = (
+                mnft_cert_resp
+                + self.connection.send_apdu([0x80, 0xF7, 0x00, idx_page, 0x00])[0]
+            )
+        assert len(mnft_cert_resp) == (cert_len + 2)
+        cert = mnft_cert_resp[2:]
+        return "".join([f"{x:02x}" for x in cert])
 
     def get_public_key(self, derivation: Derivation, key_type: KeyType = KeyType.K1, path: str = "",
                        compressed: bool = True, hexed: bool = True) -> str:
@@ -177,7 +179,7 @@ class BasicG1(base.Base):
                 enable_data = b"\x01" + puk.encode("ascii")  # status=1 to enable + PUK bytes
                 enable_apdu = [0x80, 0xC5, 0x00, 0x00]
                 self.connection.send_encrypted(enable_apdu, enable_data)
-            except Exception:
+            except (exceptions.GenericException, exceptions.PinException):
                 # If enabling fails, continue anyway - it might already be enabled
                 pass
 
@@ -222,23 +224,20 @@ class BasicG1(base.Base):
             # This is common for clear channel public key reading
             print(f"Received 32-byte public key (x-coordinate): {pubkey.hex()}")
             return pubkey
-        elif len(pubkey) == 33 and pubkey[0] in [0x02, 0x03]:
+
+        if len(pubkey) == 33 and pubkey[0] in [0x02, 0x03]:
             # Compressed format (33 bytes starting with 0x02 or 0x03)
-            if not compressed:
-                # Would need to decompress, but for now return as-is
-                return pubkey
-            else:
-                return pubkey
-        elif len(pubkey) == 65 and pubkey[0] == 0x04:
+            return pubkey
+
+        if len(pubkey) == 65 and pubkey[0] == 0x04:
             # Card returned uncompressed public key (65 bytes)
             if compressed:
                 pub_bin = encode_pubkey(pubkey, "bin_compressed")
                 return pub_bin
-            else:
-                return pubkey
-        else:
-            # Unknown format, return as-is
             return pubkey
+
+        # Unknown format, return as-is
+        return pubkey
 
     def decrypt(self, p1: int, pubkey: bytes, encrypted_data: bytes = b"", pin: str = "") -> bytes:
 
@@ -306,14 +305,13 @@ class BasicG1(base.Base):
         except exceptions.GenericException as error:
             if error.status[0] == 0x69 and error.status[1] == 0x85:
                 raise exceptions.SeedException("No seed/key loaded") from error
-            elif error.status[0] == 0x63:
+            if error.status[0] == 0x63:
                 raise exceptions.PinException("PIN is not correct") from error
-            elif error.status[0] == 0x6A and error.status[1] == 0x80:
+            if error.status[0] == 0x6A and error.status[1] == 0x80:
                 raise exceptions.DataValidationException("Data length is not correct") from error
-            elif error.status[0] == 0x69 and error.status[1] == 0x82:
+            if error.status[0] == 0x69 and error.status[1] == 0x82:
                 raise exceptions.GenericException("Data input length is far too long") from error
-            else:
-                raise
+            raise
 
     def history(self, index: int = 0) -> NamedTuple:
         Entry = namedtuple('HistoryEntry', ['signing_counter', 'hashed_data'])
@@ -604,6 +602,16 @@ class BasicG1(base.Base):
             raise exceptions.DataValidationException(f"The {puk_name} must contain only ASCII characters.")
 
         return puk
+
+    def signature_check(self, nonce: bytes) -> base.SignatureCheckResult:
+        """
+        Sign random 32 bytes for validation that private key of public key is on the card.
+
+        BasicG1 cards do not support this operation. Use NFT card instead.
+
+        :raises NotImplementedError: BasicG1 cards do not support signature_check
+        """
+        raise NotImplementedError("BasicG1 cards do not support signature_check")
 
     def verify_pin(self, pin: str) -> None:
         pin = self.valid_pin(pin)

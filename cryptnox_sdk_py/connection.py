@@ -15,6 +15,7 @@ from typing import (
     Tuple,
     Union
 )
+import logging
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
@@ -94,12 +95,12 @@ class Connection(ContextDecorator):
         This method properly closes the connection to the card reader without
         deleting the Connection object itself.
         """
-        if self._reader and self._reader._connection:
+        if self._reader:
             try:
-                self._reader._connection.disconnect()
-            except Exception:
-                pass
-            self._reader._connection = None
+                self._reader.disconnect()
+            except (AttributeError, reader.ConnectionException):
+                # Ignore disconnect errors: disconnect is best-effort and should not raise.
+                logging.debug("Failed to disconnect from reader", exc_info=True)
 
     def send_apdu(self, apdu: List[int]) -> Tuple[List[int], int, int]:
         """
@@ -113,7 +114,7 @@ class Connection(ContextDecorator):
         """
         t_env = 0
         if self.debug:
-            print("--> sending : %i bytes data " % (len(apdu) - 5))
+            print(f"--> sending : {len(apdu) - 5} bytes data ")
             print(list_to_hexadecimal(apdu))
             t_env = time()
 
@@ -127,8 +128,7 @@ class Connection(ContextDecorator):
 
         if self.debug:
             t_ans = int((time() - t_env) * 10000) / 10.0
-            print("<-- received : %02x%02x : %i bytes data  --  time : %.1f ms"
-                  % (status1, status2, len(data), t_ans))
+            print(f"<-- received : {status1:02x}{status2:02x} : {len(data)} bytes data  --  time : {t_ans:.1f} ms")
             print(list_to_hexadecimal(data))
 
         self._check_response_code(status1, status2)
@@ -152,7 +152,7 @@ class Connection(ContextDecorator):
 
         if self.debug:
             data_length = len(data)
-            print("--> sending (SCP) : %i bytes data " % len(data))
+            print(f"--> sending (SCP) : {len(data)} bytes data ")
             if receive_long or data_length >= 256:
                 send_data = [0, data_length >> 8, data_length & 255]
             else:
@@ -169,8 +169,7 @@ class Connection(ContextDecorator):
         received = data_decoded[:-2]
         self._iv = rep[:16]
         if self.debug:
-            print("<-- received (SCP) : %s : %i bytes data " % (status.hex(),
-                                                                len(received)))
+            print(f"<-- received (SCP) : {status.hex()} : {len(received)} bytes data ")
             print(received.hex())
 
         self._check_response_code(status[0], status[1])
@@ -256,7 +255,7 @@ class Connection(ContextDecorator):
         session_public_key = session_private_key.public_key().public_bytes(
             serialization.Encoding.X962,
             serialization.PublicFormat.UncompressedPoint)
-        data = bytes.fromhex("{:x}".format(len(session_public_key)) +
+        data = bytes.fromhex(f"{len(session_public_key):x}" +
                              session_public_key.hex())
         apdu_osc = [0x80, 0x10, pairing_key_index, 0x00] + binary_to_list(data)
         rep = self.send_apdu(apdu_osc)[0]

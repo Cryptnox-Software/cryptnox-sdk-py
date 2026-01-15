@@ -55,7 +55,7 @@ digestsize = 20
 try:
     # Import Python 2's xrange for compatibility
     xrange_type = xrange  # type: ignore
-    range = xrange_type
+    range = xrange_type  # pylint: disable=redefined-builtin
 except NameError:
     # xrange doesn't exist in Python 3, use built-in range
     pass
@@ -91,10 +91,10 @@ class RIPEMD160:
         dig = self.digest()
         hex_digest = ''
         for d in dig:
-            if (is_python2):
-                hex_digest += '%02x' % ord(d)
+            if is_python2:
+                hex_digest += f'{ord(d):02x}'
             else:
-                hex_digest += '%02x' % d
+                hex_digest += f'{d:02x}'
         return hex_digest
 
     def copy(self):
@@ -380,8 +380,6 @@ def RMD160Transform(state, block):  # uint32 state[5], uchar block[64]
     state[3] = (state[4] + aa + b) % 0x100000000
     state[4] = (state[0] + bb + c) % 0x100000000
     state[0] = t % 0x100000000
-
-    pass
 
 
 def RMD160Update(ctx, inp, inplen):

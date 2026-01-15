@@ -24,14 +24,26 @@ disable=
     C0114,  # missing-module-docstring
     C0115,  # missing-class-docstring
     C0116,  # missing-function-docstring
+    C0325,  # superfluous-parens (style preference)
+    C0415,  # import-outside-toplevel (ripemd uses copy inside method)
     # Import related
     C0411,  # wrong-import-order (let isort handle it)
     C0413,  # wrong-import-position
+    R0401,  # cyclic-import (cryptos module has intentional circular imports)
     # Design patterns
     R0902,  # too-many-instance-attributes
     R0903,  # too-few-public-methods
+    R0904,  # too-many-public-methods (card classes have many methods by design)
     R0913,  # too-many-arguments
     R0914,  # too-many-locals
+    R0915,  # too-many-statements (ripemd implementation)
+    R0917,  # too-many-positional-arguments
+    R0801,  # duplicate-code (py2/py3 specials have similar code intentionally)
+    R1705,  # no-else-return (legacy crypto code style)
+    R1714,  # consider-using-in (stylistic preference)
+    R1720,  # no-else-raise (legacy crypto code style)
+    # Exceptions
+    W0719,  # broad-exception-raised (legacy crypto code uses generic exceptions)
     # Other
     W0511,  # fixme (TODOs are ok)
     W1203,  # logging-fstring-interpolation
@@ -39,9 +51,6 @@ disable=
 [REPORTS]
 # Set the output format
 output-format=text
-
-# Include message's id in output
-include-ids=yes
 
 # Activate the evaluation score
 score=yes

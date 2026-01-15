@@ -14,6 +14,7 @@ import hashlib
 import re
 import base64
 import hmac
+import builtins
 from . import ripemd
 
 # Elliptic curve parameters (secp256k1)
@@ -28,7 +29,7 @@ G = (Gx, Gy)
 
 
 def change_curve(p, n, a, b, gx, gy):
-    global P, N, A, B, Gx, Gy, G
+    global P, N, A, B, Gx, Gy, G  # pylint: disable=global-statement
     P, N, A, B, Gx, Gy = p, n, a, b, gx, gy
     G = (Gx, Gy)
 
@@ -58,19 +59,17 @@ def access(obj, prop):
     if isinstance(obj, dict):
         if prop in obj:
             return obj[prop]
-        elif '.' in prop:
+        if '.' in prop:
             return obj[float(prop)]
-        else:
-            return obj[int(prop)]
-    else:
         return obj[int(prop)]
+    return obj[int(prop)]
 
 
 def multiaccess(obj, prop):
     return [access(o, prop) for o in obj]
 
 
-def slice(obj, start=0, end=2**200):
+def obj_slice(obj, start=0, end=2**200):
     return obj[int(start):int(end)]
 
 
@@ -78,11 +77,8 @@ def count(obj):
     return len(obj)
 
 
-_sum = sum
-
-
-def sum(obj):
-    return _sum(obj)
+def obj_sum(obj):
+    return builtins.sum(obj)
 
 
 def isinf(p):
@@ -291,20 +287,22 @@ def compress(pubkey):
     f = get_pubkey_format(pubkey)
     if 'compressed' in f:
         return pubkey
-    elif f == 'bin':
+    if f == 'bin':
         return encode_pubkey(decode_pubkey(pubkey, f), 'bin_compressed')
-    elif f == 'hex' or f == 'decimal':
+    if f in ('hex', 'decimal'):
         return encode_pubkey(decode_pubkey(pubkey, f), 'hex_compressed')
+    return pubkey  # Return as-is for unhandled formats
 
 
 def decompress(pubkey):
     f = get_pubkey_format(pubkey)
     if 'compressed' not in f:
         return pubkey
-    elif f == 'bin_compressed':
+    if f == 'bin_compressed':
         return encode_pubkey(decode_pubkey(pubkey, f), 'bin')
-    elif f == 'hex_compressed' or f == 'decimal':
+    if f in ('hex_compressed', 'decimal'):
         return encode_pubkey(decode_pubkey(pubkey, f), 'hex')
+    return pubkey  # Return as-is for unhandled formats
 
 
 def neg_pubkey(pubkey):
@@ -339,7 +337,7 @@ def bin_hash160(string):
     digest = ''
     try:
         digest = hashlib.new('ripemd160', intermed).digest()
-    except Exception:
+    except ValueError:
         digest = ripemd.RIPEMD160(intermed).digest()
     return digest
 
@@ -364,7 +362,7 @@ def sha256(string):
 def bin_ripemd160(string):
     try:
         digest = hashlib.new('ripemd160', string).digest()
-    except Exception:
+    except ValueError:
         digest = ripemd.RIPEMD160(string).digest()
     return digest
 
@@ -385,7 +383,7 @@ def dbl_sha256(string):
 def bin_slowsha(string):
     string = py2specials.from_string_to_bytes(string)
     orig_input = string
-    for i in range(100000):
+    for _ in range(100000):
         string = hashlib.sha256(string + orig_input).digest()
     return string
 
@@ -466,7 +464,7 @@ def is_privkey(priv):
     try:
         get_privkey_format(priv)
         return True
-    except Exception:
+    except (ValueError, TypeError, AttributeError):
         return False
 
 
@@ -474,7 +472,7 @@ def is_pubkey(pubkey):
     try:
         get_pubkey_format(pubkey)
         return True
-    except Exception:
+    except (ValueError, TypeError, AttributeError):
         return False
 
 
